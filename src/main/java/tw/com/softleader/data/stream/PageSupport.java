@@ -28,17 +28,17 @@ import org.jooq.lambda.tuple.Tuple9;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder0;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder1;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder10;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder2;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder3;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder4;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder5;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder6;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder7;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder8;
-import tw.com.softleader.data.stream.builder.PageSupportBuilder9;
+import tw.com.softleader.data.stream.support.PageSupportFetcher0;
+import tw.com.softleader.data.stream.support.PageSupportFetcher1;
+import tw.com.softleader.data.stream.support.PageSupportFetcher10;
+import tw.com.softleader.data.stream.support.PageSupportFetcher2;
+import tw.com.softleader.data.stream.support.PageSupportFetcher3;
+import tw.com.softleader.data.stream.support.PageSupportFetcher4;
+import tw.com.softleader.data.stream.support.PageSupportFetcher5;
+import tw.com.softleader.data.stream.support.PageSupportFetcher6;
+import tw.com.softleader.data.stream.support.PageSupportFetcher7;
+import tw.com.softleader.data.stream.support.PageSupportFetcher8;
+import tw.com.softleader.data.stream.support.PageSupportFetcher9;
 
 /**
  * @author Matt Ho
@@ -48,59 +48,59 @@ public class PageSupport {
 
   // --- builder pattern
 
-  public <R> PageSupportBuilder0<R> of(
+  public <R> PageSupportFetcher0<R> of(
       @NonNull Function1<Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder0<>(fetcher);
+    return new PageSupportFetcher0<>(fetcher);
   }
 
-  public <T1, R> PageSupportBuilder1<T1, R> of(
+  public <T1, R> PageSupportFetcher1<T1, R> of(
       @NonNull Function2<T1, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder1<>(fetcher);
+    return new PageSupportFetcher1<>(fetcher);
   }
 
-  public <T1, T2, R> PageSupportBuilder2<T1, T2, R> of(
+  public <T1, T2, R> PageSupportFetcher2<T1, T2, R> of(
       @NonNull Function3<T1, T2, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder2<>(fetcher);
+    return new PageSupportFetcher2<>(fetcher);
   }
 
-  public <T1, T2, T3, R> PageSupportBuilder3<T1, T2, T3, R> of(
+  public <T1, T2, T3, R> PageSupportFetcher3<T1, T2, T3, R> of(
       @NonNull Function4<T1, T2, T3, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder3<>(fetcher);
+    return new PageSupportFetcher3<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, R> PageSupportBuilder4<T1, T2, T3, T4, R> of(
+  public <T1, T2, T3, T4, R> PageSupportFetcher4<T1, T2, T3, T4, R> of(
       @NonNull Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder4<>(fetcher);
+    return new PageSupportFetcher4<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, R> PageSupportBuilder5<T1, T2, T3, T4, T5, R> of(
+  public <T1, T2, T3, T4, T5, R> PageSupportFetcher5<T1, T2, T3, T4, T5, R> of(
       @NonNull Function6<T1, T2, T3, T4, T5, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder5<>(fetcher);
+    return new PageSupportFetcher5<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, R> PageSupportBuilder6<T1, T2, T3, T4, T5, T6, R> of(
+  public <T1, T2, T3, T4, T5, T6, R> PageSupportFetcher6<T1, T2, T3, T4, T5, T6, R> of(
       @NonNull Function7<T1, T2, T3, T4, T5, T6, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder6<>(fetcher);
+    return new PageSupportFetcher6<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, R> PageSupportBuilder7<T1, T2, T3, T4, T5, T6, T7, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, R> PageSupportFetcher7<T1, T2, T3, T4, T5, T6, T7, R> of(
       @NonNull Function8<T1, T2, T3, T4, T5, T6, T7, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder7<>(fetcher);
+    return new PageSupportFetcher7<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, R> PageSupportBuilder8<T1, T2, T3, T4, T5, T6, T7, T8, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, T8, R> PageSupportFetcher8<T1, T2, T3, T4, T5, T6, T7, T8, R> of(
       @NonNull Function9<T1, T2, T3, T4, T5, T6, T7, T8, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder8<>(fetcher);
+    return new PageSupportFetcher8<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> PageSupportBuilder9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> PageSupportFetcher9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> of(
       @NonNull Function10<T1, T2, T3, T4, T5, T6, T7, T8, T9, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder9<>(fetcher);
+    return new PageSupportFetcher9<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> PageSupportBuilder10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> PageSupportFetcher10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> of(
       @NonNull Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher) {
-    return new PageSupportBuilder10<>(fetcher);
+    return new PageSupportFetcher10<>(fetcher);
   }
 
   // --- 0 argument

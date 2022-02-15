@@ -1,4 +1,4 @@
-package tw.com.softleader.data.stream.builder;
+package tw.com.softleader.data.stream.support;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,11 +16,11 @@ import tw.com.softleader.data.stream.PageSpliterator;
 /**
  * @author Matt Ho
  */
-public class PageSupportBuilder0<R> {
+public class PageSupportFetcher0<R> {
 
   private final Function1<Pageable, Page<R>> fetcher;
 
-  public PageSupportBuilder0(
+  public PageSupportFetcher0(
       Function1<Pageable, Page<R>> fetcher) {
     this.fetcher = fetcher;
   }
