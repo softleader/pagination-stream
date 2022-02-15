@@ -49,7 +49,7 @@ PageSupport
 
 `PageSupport` 也有提供 Builder 模式的建構方式, 你可以透過 `PageSupport#of` 開始一個 Builder 的建構:
 
-```
+```java
 PageSupport
   .of(method::fetchData)
   .args(1, 2L, "3", Pageable.ofSize(10))
@@ -60,7 +60,7 @@ PageSupport
 使用 Builder 模式就可以事先定義 *Page Stream* 的建構方式, 且重複的開出多個 *stream* 物件, 如:
 
 ```java
-var fetcher = PageSupport.of(method::toInvoke);
+var fetcher = PageSupport.of(method::fetchData);
 
 fetcher.args(1, 2L, "3", Pageable.ofSize(10))
   .stream()
