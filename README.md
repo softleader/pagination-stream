@@ -29,7 +29,7 @@ Page<MyObject> someMethod(int a, long b, String c, Pageable pageable) {
 
 ```java
 PageSupport
-  .pagedStream(execute::someMethod, 1, 2, 3, Pageable.ofSize(10))
+  .pagedStream(execute::someMethod, 1, 2L, "3", Pageable.ofSize(10))
   .forEach(page -> { // page will be List<T>
     // do something to every page
   })
@@ -39,7 +39,7 @@ PageSupport
 
 ```java    
 PageSupport
-  .pagedStream(execute::someMethod, 1, 2, 3, Pageable.ofSize(10))
+  .pagedStream(execute::someMethod, 1, 2L, "3", Pageable.ofSize(10))
   .forEach(data -> { // data will be MyObject
     // do something to every single data
   })
