@@ -80,15 +80,15 @@ class DifficultCalculationService {
 interface PersonClient {
  
   @GetMapping("/people")
-  Page<Person> findAll(Specification<Person> spec, Pageable pageable);
+  Page<Person> findAll(Personcriteria criteria, Pageable pageable);
 }
 
 class DifficultCalculationService {
   
   PersonClient client;
   
-  long calculate(Specification<Person> spec, Pageable pageable) {
-    return PageSupport.stream(client::findAll, spec, pageable)
+  long calculate(criteria criteria, Pageable pageable) {
+    return PageSupport.stream(client::findAll, criteria, pageable)
       .mapToLong(person -> {
         ...
       })
