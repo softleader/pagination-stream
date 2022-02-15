@@ -16,7 +16,7 @@ Pagination stream API
 
 首先定義要呼叫的 method, 必須符合:
 
-1. Input 必須為任意 1 ~ 10 個 args 及最後為一個 [`Pageable`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html) 物件的組合
+1. Input 必須為任意 0 ~ 10 個 args 及最後為一個 [`Pageable`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html) 物件的組合
 2. Return Type 必須為 [`Page<T>`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Page.html), 例如:
 
 ```java
