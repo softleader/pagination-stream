@@ -39,7 +39,7 @@ PageSupport
 
 ```java    
 PageSupport
-  .pagedStream(execute::someMethod, 1, 2L, "3", Pageable.ofSize(10))
+  .stream(execute::someMethod, 1, 2L, "3", Pageable.ofSize(10))
   .forEach(data -> { // data will be MyObject
     // do something to every single data
   })
