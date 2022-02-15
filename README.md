@@ -87,7 +87,7 @@ class DifficultCalculationService {
   
   PersonClient client;
   
-  long calculate(criteria criteria, Pageable pageable) {
+  long calculate(Personcriteria criteria, Pageable pageable) {
     return PageSupport.stream(client::findAll, criteria, pageable)
       .mapToLong(person -> {
         ...
