@@ -10,7 +10,7 @@ Pagination stream API
 </dependency>
 ```
 
-> 你可以在 [Release Page](https://github.com/softleader/pagination-stream/releases) 找到最新的版號
+> 你可以在 [Release Page](https://github.com/softleader/pagination-stream/releases/latest) 找到最新的版號
 
 ## Usage
 
