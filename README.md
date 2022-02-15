@@ -20,7 +20,7 @@ Pagination stream API
 2. Return Type 必須為 [`Page<T>`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Page.html), 例如:
 
 ```java
-Page<MyObject> data(int a, long b, String c, Pageable pageable) {
+Page<MyData> data(int a, long b, String c, Pageable pageable) {
   ...
 }  
 ```
@@ -40,7 +40,7 @@ PageSupport
 ```java    
 PageSupport
   .stream(fetch::data, 1, 2L, "3", Pageable.ofSize(10))
-  .forEach(data -> { // data will be MyObject
+  .forEach(data -> { // data will be MyData
     // do something to every single data
   })
 ```
