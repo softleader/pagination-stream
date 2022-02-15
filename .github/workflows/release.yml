@@ -11,7 +11,7 @@ jobs:
   release-artifact:
     runs-on: ubuntu-latest
     steps:
-      - id: specification-mapper-release
+      - id: pagination-stream-release
         uses: shihyuho/go-jenkins-trigger@v1
         with:
           jenkins-url: "${{ secrets.JENKINS_URL }}"
