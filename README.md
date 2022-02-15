@@ -45,7 +45,7 @@ PageSupport
   })
 ```
 
-## Examples
+## Example
 
 ### Page Form Repository
 
