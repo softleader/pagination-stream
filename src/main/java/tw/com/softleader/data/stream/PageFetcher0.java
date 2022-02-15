@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
  * @author Matt Ho
  */
 @AllArgsConstructor
-class PageFetcher0<R> implements Supplier<Function<Pageable, Page<R>>> {
+public class PageFetcher0<R> implements Supplier<Function<Pageable, Page<R>>> {
 
   @NonNull
   private final Function1<Pageable, Page<R>> fetcher;
