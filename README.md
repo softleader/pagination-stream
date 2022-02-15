@@ -20,7 +20,7 @@ Pagination stream API
 2. Return Type 必須為 [`Page<T>`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Page.html), 例如:
 
 ```java
-Page<MyObject> fetchData(int a, long b, String c, Pageable pageable) {
+Page<MyObject> data(int a, long b, String c, Pageable pageable) {
   ...
 }  
 ```
@@ -29,7 +29,7 @@ Page<MyObject> fetchData(int a, long b, String c, Pageable pageable) {
 
 ```java
 PageSupport
-  .pagedStream(method::fetchData, 1, 2L, "3", Pageable.ofSize(10))
+  .pagedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10))
   .forEach(page -> { // page will be List<T>
     // do something to every page
   })
@@ -39,7 +39,7 @@ PageSupport
 
 ```java    
 PageSupport
-  .stream(method::fetchData, 1, 2L, "3", Pageable.ofSize(10))
+  .stream(fetch::data, 1, 2L, "3", Pageable.ofSize(10))
   .forEach(data -> { // data will be MyObject
     // do something to every single data
   })
@@ -51,7 +51,7 @@ PageSupport
 
 ```java
 PageSupport
-  .of(method::fetchData)
+  .of(fetch::data)
   .args(1, 2L, "3", Pageable.ofSize(10))
   .stream()
   . ...
@@ -60,7 +60,7 @@ PageSupport
 使用 Builder 模式就可以事先定義 *Page Stream* 的建構方式, 且重複的開出多個 *stream* 物件, 如:
 
 ```java
-var fetcher = PageSupport.of(method::fetchData);
+var fetcher = PageSupport.of(fetch::data);
 
 fetcher.args(1, 2L, "3", Pageable.ofSize(10))
   .stream()
