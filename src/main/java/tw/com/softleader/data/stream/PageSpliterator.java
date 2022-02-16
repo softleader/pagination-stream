@@ -1,5 +1,7 @@
 package tw.com.softleader.data.stream;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -18,7 +20,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
 
   final Supplier<Function<Pageable, Page<T>>> fetcher;
   Pageable pageable;
-  Page<T> first;
+  Integer totalPages;
 
   public PageSpliterator(
       @NonNull Supplier<Function<Pageable, Page<T>>> fetcher, @NonNull Pageable pageable) {
@@ -28,17 +30,16 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
 
   @Override
   public boolean tryAdvance(Consumer<? super List<T>> action) {
-    var fetched = fetch();
+    var fetched = fetcher.get().apply(pageable);
+    if (totalPages == null) {
+      totalPages = fetched.getTotalPages();
+    }
     action.accept(fetched.getContent());
     if (fetched.hasNext()) {
       pageable = pageable.next();
       return true;
     }
     return false;
-  }
-
-  private Page<T> fetch() {
-    return fetcher.get().apply(pageable);
   }
 
   @Override
@@ -48,10 +49,9 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
 
   @Override
   public long estimateSize() {
-    if (first == null) {
-      first = fetch();
-    }
-    return first.getTotalPages();
+    return ofNullable(totalPages)
+        .map(Integer::longValue)
+        .orElse(Long.MAX_VALUE);
   }
 
   @Override

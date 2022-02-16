@@ -1,8 +1,11 @@
 package tw.com.softleader.data.stream;
 
 import static java.util.stream.Collectors.toList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.LongStream;
 import org.assertj.core.api.Assertions;
@@ -17,19 +20,20 @@ class PageFetcher0Test {
 
   @Test
   void test() {
-    var api = new Api();
+    var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var collect = PageSupport
-        .pagedStream(api::call, pageable)
-        .collect(toList());
-    Assertions.assertThat(collect).hasSize(TOTAL_PAGES);
-
-    var sum = collect.stream()
-        .flatMap(Collection::stream)
+    var sum = PageSupport
+        .stream(api::call, pageable)
+        .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
         .mapToLong(Long::longValue)
         .sum();
-    Assertions.assertThat(sum).isEqualTo(20);
+
+    Assertions.assertThat(sum).isEqualTo(
+        (1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
+
+    verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES)).call(any(Pageable.class));
   }
 
   static class Api {
@@ -42,7 +46,7 @@ class PageFetcher0Test {
       }
 
       // fake data
-      var data = LongStream.rangeClosed(0, pageAt)
+      var data = LongStream.rangeClosed(0, pageAt + 1)
           .boxed()
           .collect(toList());
 
