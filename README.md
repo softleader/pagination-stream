@@ -6,7 +6,7 @@ Pagination stream API
 <dependency>
   <groupId>tw.com.softleader.data</groupId>
   <artifactId>pagination-stream</artifactId>
-  <version>${pagination-stream.version}</version>
+  <version>last-release-version</version>
 </dependency>
 ```
 
