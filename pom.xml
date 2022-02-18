@@ -7,11 +7,12 @@
   <groupId>tw.com.softleader.data</groupId>
   <artifactId>pagination-stream</artifactId>
   <version>1.0.3</version>
+  <inceptionYear>2022</inceptionYear>
 
   <description>Pagination stream API for Spring Data</description>
 
   <organization>
-    <name>Softleader</name>
+    <name>SoftLeader</name>
     <url>http://www.softleader.com.tw</url>
   </organization>
 
@@ -20,7 +21,6 @@
     <connection>scm:git:git@github.com:softleader/specification-mapper.git</connection>
     <developerConnection>scm:git:git@github.com:softleader/specification-mapper.git
     </developerConnection>
-    <tag>framework</tag>
   </scm>
 
   <pluginRepositories>
@@ -75,6 +75,7 @@
     <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
     <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
+    <license-maven-plugin.version>4.1</license-maven-plugin.version>
 
     <spring-boot.version>2.6.3</spring-boot.version>
 
@@ -176,6 +177,36 @@
           </executions>
         </plugin>
         <plugin>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>${license-maven-plugin.version}</version>
+          <configuration>
+            <licenseSets>
+              <licenseSet>
+                <header>copyright-license-header-template.txt</header>
+                <excludes>
+                  <exclude>**/README</exclude>
+                  <exclude>.editorconfig</exclude>
+                  <exclude>Makefile</exclude>
+                  <exclude>Jenkinsfile*</exclude>
+                  <exclude>ide-config/**</exclude>
+                  <exclude>**/*.xml</exclude>
+                  <exclude>src/test/resources/**</exclude>
+                  <exclude>src/main/resources/**</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>format</goal>
+              </goals>
+              <phase>process-sources</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
@@ -200,6 +231,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

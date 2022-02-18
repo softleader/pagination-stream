@@ -1,3 +1,5 @@
+[![version](https://img.shields.io/github/v/release/softleader/pagination-stream?color=brightgreen&sort=semver)](https://github.com/softleader/pagination-stream/releases)
+
 # pagination-stream
 
 Pagination stream API
