@@ -47,13 +47,13 @@ public class PageSupportFetcher1<T1, R> {
     this.fetcher = fetcher;
   }
 
-  public PageSupportArgs<T1, R> args(
+  public PageSupportArgs<R> args(
       @NonNull Tuple1<T1> args,
       @NonNull Pageable pageable) {
-    return new PageSupportArgs<>(fetcher, args, pageable);
+    return new PageSupportArgs1<>(fetcher, args, pageable);
   }
 
-  public PageSupportArgs<T1, R> args(
+  public PageSupportArgs<R> args(
       @Nullable T1 arg1,
       @NonNull Pageable pageable) {
     return args(
@@ -62,7 +62,7 @@ public class PageSupportFetcher1<T1, R> {
   }
 
   @AllArgsConstructor(access = AccessLevel.PACKAGE)
-  public static class PageSupportArgs<T1, R> {
+  static class PageSupportArgs1<T1, R> implements PageSupportArgs<R> {
 
     @NonNull
     private final Function2<T1, Pageable, Page<R>> fetcher;
@@ -71,12 +71,14 @@ public class PageSupportFetcher1<T1, R> {
     @NonNull
     private final Pageable pageable;
 
+    @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
           new PageSpliterator<>(new PageFetcher1<>(fetcher, args), pageable),
           false);
     }
 
+    @Override
     public Stream<R> stream() {
       return pagedStream()
           .flatMap(Collection::stream);

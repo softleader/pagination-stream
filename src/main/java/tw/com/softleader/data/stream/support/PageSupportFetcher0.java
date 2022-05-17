@@ -47,23 +47,25 @@ public class PageSupportFetcher0<R> {
 
   public PageSupportArgs<R> args(
       @NonNull Pageable pageable) {
-    return new PageSupportArgs<>(fetcher, pageable);
+    return new PageSupportArgs0<>(fetcher, pageable);
   }
 
   @AllArgsConstructor(access = AccessLevel.PACKAGE)
-  public static class PageSupportArgs<R> {
+  static class PageSupportArgs0<R> implements PageSupportArgs<R> {
 
     @NonNull
     private final Function1<Pageable, Page<R>> fetcher;
     @NonNull
     private final Pageable pageable;
 
+    @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
           new PageSpliterator<>(new PageFetcher0<>(fetcher), pageable),
           false);
     }
 
+    @Override
     public Stream<R> stream() {
       return pagedStream()
           .flatMap(Collection::stream);
