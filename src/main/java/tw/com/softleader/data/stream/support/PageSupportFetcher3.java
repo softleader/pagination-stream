@@ -20,7 +20,6 @@
  */
 package tw.com.softleader.data.stream.support;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -32,8 +31,8 @@ import org.jooq.lambda.tuple.Tuple3;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
-import tw.com.softleader.data.stream.PageFetcher3;
 import tw.com.softleader.data.stream.PageSpliterator;
+import tw.com.softleader.data.stream.PageStreamBuilder;
 
 /**
  * @author Matt Ho
@@ -47,13 +46,13 @@ public class PageSupportFetcher3<T1, T2, T3, R> {
     this.fetcher = fetcher;
   }
 
-  public PageSupportArgs<R> args(
+  public PageStreamBuilder<R> args(
       @NonNull Tuple3<T1, T2, T3> args,
       @NonNull Pageable pageable) {
-    return new PageSupportArgs3<>(fetcher, args, pageable);
+    return new PageStreamBuilder3<>(fetcher, args, pageable);
   }
 
-  public PageSupportArgs<R> args(
+  public PageStreamBuilder<R> args(
       @Nullable T1 arg1,
       @Nullable T2 arg2,
       @Nullable T3 arg3,
@@ -64,7 +63,7 @@ public class PageSupportFetcher3<T1, T2, T3, R> {
   }
 
   @AllArgsConstructor(access = AccessLevel.PACKAGE)
-  static class PageSupportArgs3<T1, T2, T3, R> implements PageSupportArgs<R> {
+  static class PageStreamBuilder3<T1, T2, T3, R> implements PageStreamBuilder<R> {
 
     @NonNull
     private final Function4<T1, T2, T3, Pageable, Page<R>> fetcher;
@@ -78,12 +77,6 @@ public class PageSupportFetcher3<T1, T2, T3, R> {
       return StreamSupport.stream(
           new PageSpliterator<>(new PageFetcher3<>(fetcher, args), pageable),
           false);
-    }
-
-    @Override
-    public Stream<R> stream() {
-      return pagedStream()
-          .flatMap(Collection::stream);
     }
   }
 }

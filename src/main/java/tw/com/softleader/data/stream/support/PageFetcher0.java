@@ -20,15 +20,26 @@
  */
 package tw.com.softleader.data.stream.support;
 
-import java.util.List;
-import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import org.jooq.lambda.function.Function1;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import tw.com.softleader.data.stream.PageFetcher;
 
 /**
+ * A function with 0 arguments and 1 pageable
+ *
  * @author Matt Ho
  */
-public interface PageSupportArgs<R> {
+@AllArgsConstructor
+public class PageFetcher0<R> implements PageFetcher<R> {
 
-  Stream<List<R>> pagedStream();
+  @NonNull
+  private final Function1<Pageable, Page<R>> fetcher;
 
-  Stream<R> stream();
+  @Override
+  public Page<R> fetch(@NonNull Pageable pageable) {
+    return fetcher.apply(pageable);
+  }
 }

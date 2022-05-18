@@ -18,32 +18,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package tw.com.softleader.data.stream;
+package tw.com.softleader.data.stream.support;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.jooq.lambda.function.Function5;
-import org.jooq.lambda.tuple.Tuple4;
+import org.jooq.lambda.function.Function3;
+import org.jooq.lambda.tuple.Tuple2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import tw.com.softleader.data.stream.PageFetcher;
 
 /**
- * A function with 4 arguments and 1 pageable
+ * A function with 2 arguments and 1 pageable
  *
  * @author Matt Ho
  */
 @RequiredArgsConstructor
-public class PageFetcher4<T1, T2, T3, T4, R> implements Supplier<Function<Pageable, Page<R>>> {
+public class PageFetcher2<T1, T2, R> implements PageFetcher<R> {
 
   @NonNull
-  private final Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher;
+  private final Function3<T1, T2, Pageable, Page<R>> fetcher;
   @NonNull
-  private final Tuple4<T1, T2, T3, T4> args;
+  private final Tuple2<T1, T2> args;
 
   @Override
-  public Function<Pageable, Page<R>> get() {
-    return fetcher.applyPartially(args)::apply;
+  public Page<R> fetch(@NonNull Pageable pageable) {
+    return fetcher.applyPartially(args).apply(pageable);
   }
 }
