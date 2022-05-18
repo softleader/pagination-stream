@@ -20,14 +20,15 @@
  */
 package tw.com.softleader.data.stream.support;
 
+import static lombok.AccessLevel.PACKAGE;
+
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.jooq.lambda.function.Function11;
-import org.jooq.lambda.tuple.Tuple10;
+import lombok.RequiredArgsConstructor;
+import org.jooq.lambda.function.Function2;
+import org.jooq.lambda.tuple.Tuple1;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
@@ -37,53 +38,40 @@ import tw.com.softleader.data.stream.PageStreamBuilder;
 /**
  * @author Matt Ho
  */
-public class PageSupportFetcher10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> {
+@RequiredArgsConstructor
+public class PageStreamConjunction1<T1, R> {
 
-  private final Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher;
-
-  public PageSupportFetcher10(
-      Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher) {
-    this.fetcher = fetcher;
-  }
+  @NonNull
+  private final Function2<T1, Pageable, Page<R>> fetcher;
 
   public PageStreamBuilder<R> args(
-      @NonNull Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args,
+      @NonNull Tuple1<T1> args,
       @NonNull Pageable pageable) {
-    return new PageStreamBuilder10<>(fetcher, args, pageable);
+    return new PageStreamBuilder1<>(fetcher, args, pageable);
   }
 
   public PageStreamBuilder<R> args(
       @Nullable T1 arg1,
-      @Nullable T2 arg2,
-      @Nullable T3 arg3,
-      @Nullable T4 arg4,
-      @Nullable T5 arg5,
-      @Nullable T6 arg6,
-      @Nullable T7 arg7,
-      @Nullable T8 arg8,
-      @Nullable T9 arg9,
-      @Nullable T10 arg10,
       @NonNull Pageable pageable) {
     return args(
-        new Tuple10<>(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10),
+        new Tuple1<>(arg1),
         pageable);
   }
 
-  @AllArgsConstructor(access = AccessLevel.PACKAGE)
-  static class PageStreamBuilder10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> implements
-      PageStreamBuilder<R> {
+  @RequiredArgsConstructor(access = PACKAGE)
+  static class PageStreamBuilder1<T1, R> implements PageStreamBuilder<R> {
 
     @NonNull
-    private final Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher;
+    private final Function2<T1, Pageable, Page<R>> fetcher;
     @NonNull
-    private final Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args;
+    private final Tuple1<T1> args;
     @NonNull
     private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher10<>(fetcher, args), pageable),
+          new PageSpliterator<>(new PageFetcher1<>(fetcher, args), pageable),
           false);
     }
   }

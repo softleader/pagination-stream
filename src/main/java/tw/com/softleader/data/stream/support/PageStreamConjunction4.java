@@ -20,12 +20,13 @@
  */
 package tw.com.softleader.data.stream.support;
 
+import static lombok.AccessLevel.PACKAGE;
+
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.jooq.lambda.function.Function5;
 import org.jooq.lambda.tuple.Tuple4;
 import org.springframework.data.domain.Page;
@@ -37,14 +38,11 @@ import tw.com.softleader.data.stream.PageStreamBuilder;
 /**
  * @author Matt Ho
  */
-public class PageSupportFetcher4<T1, T2, T3, T4, R> {
+@RequiredArgsConstructor
+public class PageStreamConjunction4<T1, T2, T3, T4, R> {
 
+  @NonNull
   private final Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher;
-
-  public PageSupportFetcher4(
-      Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher) {
-    this.fetcher = fetcher;
-  }
 
   public PageStreamBuilder<R> args(
       @NonNull Tuple4<T1, T2, T3, T4> args,
@@ -63,7 +61,7 @@ public class PageSupportFetcher4<T1, T2, T3, T4, R> {
         pageable);
   }
 
-  @AllArgsConstructor(access = AccessLevel.PACKAGE)
+  @RequiredArgsConstructor(access = PACKAGE)
   static class PageStreamBuilder4<T1, T2, T3, T4, R> implements PageStreamBuilder<R> {
 
     @NonNull
