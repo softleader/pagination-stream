@@ -37,11 +37,11 @@ import tw.com.softleader.data.stream.PageStreamBuilder;
 /**
  * @author Matt Ho
  */
-public class PageSupportFetcher8<T1, T2, T3, T4, T5, T6, T7, T8, R> {
+public class PageStreamConjunction8<T1, T2, T3, T4, T5, T6, T7, T8, R> {
 
   private final Function9<T1, T2, T3, T4, T5, T6, T7, T8, Pageable, Page<R>> fetcher;
 
-  public PageSupportFetcher8(
+  public PageStreamConjunction8(
       Function9<T1, T2, T3, T4, T5, T6, T7, T8, Pageable, Page<R>> fetcher) {
     this.fetcher = fetcher;
   }

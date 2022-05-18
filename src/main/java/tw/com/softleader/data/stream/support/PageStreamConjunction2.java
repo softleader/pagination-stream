@@ -26,8 +26,8 @@ import java.util.stream.StreamSupport;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.jooq.lambda.function.Function4;
-import org.jooq.lambda.tuple.Tuple3;
+import org.jooq.lambda.function.Function3;
+import org.jooq.lambda.tuple.Tuple2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
@@ -37,45 +37,44 @@ import tw.com.softleader.data.stream.PageStreamBuilder;
 /**
  * @author Matt Ho
  */
-public class PageSupportFetcher3<T1, T2, T3, R> {
+public class PageStreamConjunction2<T1, T2, R> {
 
-  private final Function4<T1, T2, T3, Pageable, Page<R>> fetcher;
+  private final Function3<T1, T2, Pageable, Page<R>> fetcher;
 
-  public PageSupportFetcher3(
-      Function4<T1, T2, T3, Pageable, Page<R>> fetcher) {
+  public PageStreamConjunction2(
+      Function3<T1, T2, Pageable, Page<R>> fetcher) {
     this.fetcher = fetcher;
   }
 
   public PageStreamBuilder<R> args(
-      @NonNull Tuple3<T1, T2, T3> args,
+      @NonNull Tuple2<T1, T2> args,
       @NonNull Pageable pageable) {
-    return new PageStreamBuilder3<>(fetcher, args, pageable);
+    return new PageStreamBuilder2<>(fetcher, args, pageable);
   }
 
   public PageStreamBuilder<R> args(
       @Nullable T1 arg1,
       @Nullable T2 arg2,
-      @Nullable T3 arg3,
       @NonNull Pageable pageable) {
     return args(
-        new Tuple3<>(arg1, arg2, arg3),
+        new Tuple2<>(arg1, arg2),
         pageable);
   }
 
   @AllArgsConstructor(access = AccessLevel.PACKAGE)
-  static class PageStreamBuilder3<T1, T2, T3, R> implements PageStreamBuilder<R> {
+  static class PageStreamBuilder2<T1, T2, R> implements PageStreamBuilder<R> {
 
     @NonNull
-    private final Function4<T1, T2, T3, Pageable, Page<R>> fetcher;
+    private final Function3<T1, T2, Pageable, Page<R>> fetcher;
     @NonNull
-    private final Tuple3<T1, T2, T3> args;
+    private final Tuple2<T1, T2> args;
     @NonNull
     private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher3<>(fetcher, args), pageable),
+          new PageSpliterator<>(new PageFetcher2<>(fetcher, args), pageable),
           false);
     }
   }
