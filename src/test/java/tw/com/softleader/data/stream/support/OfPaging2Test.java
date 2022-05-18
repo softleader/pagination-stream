@@ -35,7 +35,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-class PageStreamConjunction6Test {
+class OfPaging2Test {
 
   static final int TOTAL_PAGES = 5;
 
@@ -44,8 +44,8 @@ class PageStreamConjunction6Test {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new PageStreamConjunction6<>(api::call)
-        .args(10, 2, 3, 4, 5, 6, pageable)
+    var sum = new OfPaging2<>(api::call)
+        .args(10, 2, pageable)
         .stream()
         .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
         .mapToLong(Long::longValue)
@@ -53,17 +53,15 @@ class PageStreamConjunction6Test {
 
     Assertions.assertThat(sum).isEqualTo(
         ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2 * 3 * 4 * 5 * 6);
+            * 10 * 2);
 
-    verify(api, times(1)).call(10, 2, 3, 4, 5, 6, pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES)).call(
-        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), any(Pageable.class));
+    verify(api, times(1)).call(10, 2, pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES)).call(eq(10), eq(2), any(Pageable.class));
   }
 
   static class Api {
 
-    Page<Long> call(int a, int b, int c, int d, int e, int f,
-        Pageable pageable) {
+    Page<Long> call(int a, int b, Pageable pageable) {
       var pageAt = pageable.getPageNumber(); // start from 0
 
       if (pageAt >= TOTAL_PAGES) {
@@ -73,7 +71,7 @@ class PageStreamConjunction6Test {
       // fake data
       var data = LongStream.rangeClosed(0, pageAt + 1)
           .boxed()
-          .map(l -> l * a * b * c * d * e * f)
+          .map(l -> l * a * b)
           .collect(toList());
 
       return new PageImpl<>(data, pageable, pageable.getPageSize() * (long) TOTAL_PAGES);

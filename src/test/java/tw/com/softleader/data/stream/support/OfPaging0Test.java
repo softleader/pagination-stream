@@ -22,7 +22,6 @@ package tw.com.softleader.data.stream.support;
 
 import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,7 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-class PageStreamConjunction2Test {
+class OfPaging0Test {
 
   static final int TOTAL_PAGES = 5;
 
@@ -44,24 +43,22 @@ class PageStreamConjunction2Test {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new PageStreamConjunction2<>(api::call)
-        .args(10, 2, pageable)
+    var sum = new OfPaging0<>(api::call).args(pageable)
         .stream()
         .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
         .mapToLong(Long::longValue)
         .sum();
 
     Assertions.assertThat(sum).isEqualTo(
-        ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2);
+        (1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
 
-    verify(api, times(1)).call(10, 2, pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES)).call(eq(10), eq(2), any(Pageable.class));
+    verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES)).call(any(Pageable.class));
   }
 
   static class Api {
 
-    Page<Long> call(int a, int b, Pageable pageable) {
+    Page<Long> call(Pageable pageable) {
       var pageAt = pageable.getPageNumber(); // start from 0
 
       if (pageAt >= TOTAL_PAGES) {
@@ -71,7 +68,6 @@ class PageStreamConjunction2Test {
       // fake data
       var data = LongStream.rangeClosed(0, pageAt + 1)
           .boxed()
-          .map(l -> l * a * b)
           .collect(toList());
 
       return new PageImpl<>(data, pageable, pageable.getPageSize() * (long) TOTAL_PAGES);

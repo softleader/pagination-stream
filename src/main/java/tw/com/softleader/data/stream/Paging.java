@@ -25,9 +25,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
+ * 分頁介面
+ *
  * @author Matt Ho
  */
-public interface PageStreamBuilder<R> {
+public interface Paging<R> {
 
   /**
    * Creates a new sequential {@code Stream} from {@code PageSpliterator} of every page

@@ -27,52 +27,40 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.jooq.lambda.function.Function3;
-import org.jooq.lambda.tuple.Tuple2;
+import org.jooq.lambda.function.Function1;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.lang.Nullable;
 import tw.com.softleader.data.stream.PageSpliterator;
-import tw.com.softleader.data.stream.PageStreamBuilder;
+import tw.com.softleader.data.stream.Paging;
 
 /**
+ * 0 個參數加 {@code Pageable} 的分頁 Stream
+ *
  * @author Matt Ho
  */
 @RequiredArgsConstructor
-public class PageStreamConjunction2<T1, T2, R> {
+public class OfPaging0<R> {
 
   @NonNull
-  private final Function3<T1, T2, Pageable, Page<R>> fetcher;
+  private final Function1<Pageable, Page<R>> fetcher;
 
-  public PageStreamBuilder<R> args(
-      @NonNull Tuple2<T1, T2> args,
+  public Paging<R> args(
       @NonNull Pageable pageable) {
-    return new PageStreamBuilder2<>(fetcher, args, pageable);
-  }
-
-  public PageStreamBuilder<R> args(
-      @Nullable T1 arg1,
-      @Nullable T2 arg2,
-      @NonNull Pageable pageable) {
-    return args(
-        new Tuple2<>(arg1, arg2),
-        pageable);
+    return new Paging0<>(fetcher, pageable);
   }
 
   @RequiredArgsConstructor(access = PACKAGE)
-  static class PageStreamBuilder2<T1, T2, R> implements PageStreamBuilder<R> {
+  static class Paging0<R> implements Paging<R> {
 
     @NonNull
-    private final Function3<T1, T2, Pageable, Page<R>> fetcher;
-    @NonNull
-    private final Tuple2<T1, T2> args;
+    private final Function1<Pageable, Page<R>> fetcher;
     @NonNull
     private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher2<>(fetcher, args), pageable),
+          new PageSpliterator<>(new PageFetcher0<>(fetcher), pageable),
           false);
     }
   }

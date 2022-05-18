@@ -34,9 +34,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import tw.com.softleader.data.stream.PageSupport;
 
-class PageStreamConjunction4Test {
+class OfPaging6Test {
 
   static final int TOTAL_PAGES = 5;
 
@@ -45,8 +44,8 @@ class PageStreamConjunction4Test {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new PageStreamConjunction4<>(api::call)
-        .args(10, 2, 3, 4, pageable)
+    var sum = new OfPaging6<>(api::call)
+        .args(10, 2, 3, 4, 5, 6, pageable)
         .stream()
         .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
         .mapToLong(Long::longValue)
@@ -54,15 +53,17 @@ class PageStreamConjunction4Test {
 
     Assertions.assertThat(sum).isEqualTo(
         ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2 * 3 * 4);
+            * 10 * 2 * 3 * 4 * 5 * 6);
 
-    verify(api, times(1)).call(10, 2, 3, 4, pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES)).call(eq(10), eq(2), eq(3), eq(4), any(Pageable.class));
+    verify(api, times(1)).call(10, 2, 3, 4, 5, 6, pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES)).call(
+        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), any(Pageable.class));
   }
 
   static class Api {
 
-    Page<Long> call(int a, int b, int c, int d, Pageable pageable) {
+    Page<Long> call(int a, int b, int c, int d, int e, int f,
+        Pageable pageable) {
       var pageAt = pageable.getPageNumber(); // start from 0
 
       if (pageAt >= TOTAL_PAGES) {
@@ -72,7 +73,7 @@ class PageStreamConjunction4Test {
       // fake data
       var data = LongStream.rangeClosed(0, pageAt + 1)
           .boxed()
-          .map(l -> l * a * b * c * d)
+          .map(l -> l * a * b * c * d * e * f)
           .collect(toList());
 
       return new PageImpl<>(data, pageable, pageable.getPageSize() * (long) TOTAL_PAGES);

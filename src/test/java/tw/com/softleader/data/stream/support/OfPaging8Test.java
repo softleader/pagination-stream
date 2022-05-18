@@ -34,9 +34,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import tw.com.softleader.data.stream.PageSupport;
 
-class PageStreamConjunction8Test {
+class OfPaging8Test {
 
   static final int TOTAL_PAGES = 5;
 
@@ -45,7 +44,7 @@ class PageStreamConjunction8Test {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new PageStreamConjunction8<>(api::call)
+    var sum = new OfPaging8<>(api::call)
         .args(10, 2, 3, 4, 5, 6, 7, 8, pageable)
         .stream()
         .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
