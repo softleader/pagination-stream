@@ -42,7 +42,7 @@ public class PageStreamConjunction4<T1, T2, T3, T4, R> {
   private final Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher;
 
   public PageStreamConjunction4(
-      Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher) {
+      @NonNull Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher) {
     this.fetcher = fetcher;
   }
 
