@@ -53,7 +53,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     }
     action.accept(page.getContent());
     if (page.hasNext()) {
-      pageable = pageable.next();
+      pageable = page.getPageable().next();
       return true;
     }
     return false;
