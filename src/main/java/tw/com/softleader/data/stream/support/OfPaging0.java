@@ -34,7 +34,7 @@ import tw.com.softleader.data.stream.PageSpliterator;
 import tw.com.softleader.data.stream.Paging;
 
 /**
- * 0 個參數加 {@code Pageable} 的分頁 Stream
+ * 0 個參數及 1 個 {@code Pageable} 的分頁 Stream
  *
  * @author Matt Ho
  */
