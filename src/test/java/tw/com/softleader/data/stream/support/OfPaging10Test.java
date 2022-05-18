@@ -34,9 +34,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import tw.com.softleader.data.stream.PageSupport;
 
-class PageFetcher6Test {
+class OfPaging10Test {
 
   static final int TOTAL_PAGES = 5;
 
@@ -45,24 +44,25 @@ class PageFetcher6Test {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = PageSupport
-        .stream(api::call, 10, 2, 3, 4, 5, 6, pageable)
+    var sum = new OfPaging10<>(api::call)
+        .args(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable)
+        .stream()
         .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
         .mapToLong(Long::longValue)
         .sum();
 
     Assertions.assertThat(sum).isEqualTo(
-        ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2 * 3 * 4 * 5 * 6);
+        (long) ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
+            * 10 * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 101);
 
-    verify(api, times(1)).call(10, 2, 3, 4, 5, 6, pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(1)).call(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable); // 第一次的分頁應該只 fetch 一次
     verify(api, times(TOTAL_PAGES)).call(
-        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), any(Pageable.class));
+        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), eq(7), eq(8), eq(9), eq(101), any(Pageable.class));
   }
 
   static class Api {
 
-    Page<Long> call(int a, int b, int c, int d, int e, int f,
+    Page<Long> call(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j,
         Pageable pageable) {
       var pageAt = pageable.getPageNumber(); // start from 0
 
@@ -73,7 +73,7 @@ class PageFetcher6Test {
       // fake data
       var data = LongStream.rangeClosed(0, pageAt + 1)
           .boxed()
-          .map(l -> l * a * b * c * d * e * f)
+          .map(l -> l * a * b * c * d * e * f * g * h * i * j)
           .collect(toList());
 
       return new PageImpl<>(data, pageable, pageable.getPageSize() * (long) TOTAL_PAGES);

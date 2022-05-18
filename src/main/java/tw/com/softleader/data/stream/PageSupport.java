@@ -48,17 +48,17 @@ import org.jooq.lambda.tuple.Tuple9;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
-import tw.com.softleader.data.stream.support.PageStreamConjunction0;
-import tw.com.softleader.data.stream.support.PageStreamConjunction1;
-import tw.com.softleader.data.stream.support.PageStreamConjunction10;
-import tw.com.softleader.data.stream.support.PageStreamConjunction2;
-import tw.com.softleader.data.stream.support.PageStreamConjunction3;
-import tw.com.softleader.data.stream.support.PageStreamConjunction4;
-import tw.com.softleader.data.stream.support.PageStreamConjunction5;
-import tw.com.softleader.data.stream.support.PageStreamConjunction6;
-import tw.com.softleader.data.stream.support.PageStreamConjunction7;
-import tw.com.softleader.data.stream.support.PageStreamConjunction8;
-import tw.com.softleader.data.stream.support.PageStreamConjunction9;
+import tw.com.softleader.data.stream.support.OfPaging0;
+import tw.com.softleader.data.stream.support.OfPaging1;
+import tw.com.softleader.data.stream.support.OfPaging10;
+import tw.com.softleader.data.stream.support.OfPaging2;
+import tw.com.softleader.data.stream.support.OfPaging3;
+import tw.com.softleader.data.stream.support.OfPaging4;
+import tw.com.softleader.data.stream.support.OfPaging5;
+import tw.com.softleader.data.stream.support.OfPaging6;
+import tw.com.softleader.data.stream.support.OfPaging7;
+import tw.com.softleader.data.stream.support.OfPaging8;
+import tw.com.softleader.data.stream.support.OfPaging9;
 
 /**
  * @author Matt Ho
@@ -68,59 +68,59 @@ public class PageSupport {
 
   // --- builder pattern
 
-  public <R> PageStreamConjunction0<R> of(
+  public <R> OfPaging0<R> of(
       @NonNull Function1<Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction0<>(fetcher);
+    return new OfPaging0<>(fetcher);
   }
 
-  public <T1, R> PageStreamConjunction1<T1, R> of(
+  public <T1, R> OfPaging1<T1, R> of(
       @NonNull Function2<T1, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction1<>(fetcher);
+    return new OfPaging1<>(fetcher);
   }
 
-  public <T1, T2, R> PageStreamConjunction2<T1, T2, R> of(
+  public <T1, T2, R> OfPaging2<T1, T2, R> of(
       @NonNull Function3<T1, T2, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction2<>(fetcher);
+    return new OfPaging2<>(fetcher);
   }
 
-  public <T1, T2, T3, R> PageStreamConjunction3<T1, T2, T3, R> of(
+  public <T1, T2, T3, R> OfPaging3<T1, T2, T3, R> of(
       @NonNull Function4<T1, T2, T3, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction3<>(fetcher);
+    return new OfPaging3<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, R> PageStreamConjunction4<T1, T2, T3, T4, R> of(
+  public <T1, T2, T3, T4, R> OfPaging4<T1, T2, T3, T4, R> of(
       @NonNull Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction4<>(fetcher);
+    return new OfPaging4<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, R> PageStreamConjunction5<T1, T2, T3, T4, T5, R> of(
+  public <T1, T2, T3, T4, T5, R> OfPaging5<T1, T2, T3, T4, T5, R> of(
       @NonNull Function6<T1, T2, T3, T4, T5, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction5<>(fetcher);
+    return new OfPaging5<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, R> PageStreamConjunction6<T1, T2, T3, T4, T5, T6, R> of(
+  public <T1, T2, T3, T4, T5, T6, R> OfPaging6<T1, T2, T3, T4, T5, T6, R> of(
       @NonNull Function7<T1, T2, T3, T4, T5, T6, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction6<>(fetcher);
+    return new OfPaging6<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, R> PageStreamConjunction7<T1, T2, T3, T4, T5, T6, T7, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, R> OfPaging7<T1, T2, T3, T4, T5, T6, T7, R> of(
       @NonNull Function8<T1, T2, T3, T4, T5, T6, T7, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction7<>(fetcher);
+    return new OfPaging7<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, R> PageStreamConjunction8<T1, T2, T3, T4, T5, T6, T7, T8, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, T8, R> OfPaging8<T1, T2, T3, T4, T5, T6, T7, T8, R> of(
       @NonNull Function9<T1, T2, T3, T4, T5, T6, T7, T8, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction8<>(fetcher);
+    return new OfPaging8<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> PageStreamConjunction9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> OfPaging9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> of(
       @NonNull Function10<T1, T2, T3, T4, T5, T6, T7, T8, T9, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction9<>(fetcher);
+    return new OfPaging9<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> PageStreamConjunction10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> of(
+  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> OfPaging10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> of(
       @NonNull Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher) {
-    return new PageStreamConjunction10<>(fetcher);
+    return new OfPaging10<>(fetcher);
   }
 
   // --- 0 argument

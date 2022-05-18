@@ -27,38 +27,54 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.jooq.lambda.function.Function1;
+import org.jooq.lambda.function.Function3;
+import org.jooq.lambda.tuple.Tuple2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import tw.com.softleader.data.stream.PageSpliterator;
-import tw.com.softleader.data.stream.PageStreamBuilder;
+import tw.com.softleader.data.stream.Paging;
 
 /**
+ * 2 個參數加 {@code Pageable} 的分頁
+ *
  * @author Matt Ho
  */
 @RequiredArgsConstructor
-public class PageStreamConjunction0<R> {
+public class OfPaging2<T1, T2, R> {
 
   @NonNull
-  private final Function1<Pageable, Page<R>> fetcher;
+  private final Function3<T1, T2, Pageable, Page<R>> fetcher;
 
-  public PageStreamBuilder<R> args(
+  public Paging<R> args(
+      @NonNull Tuple2<T1, T2> args,
       @NonNull Pageable pageable) {
-    return new PageStreamBuilder0<>(fetcher, pageable);
+    return new Paging2<>(fetcher, args, pageable);
+  }
+
+  public Paging<R> args(
+      @Nullable T1 arg1,
+      @Nullable T2 arg2,
+      @NonNull Pageable pageable) {
+    return args(
+        new Tuple2<>(arg1, arg2),
+        pageable);
   }
 
   @RequiredArgsConstructor(access = PACKAGE)
-  static class PageStreamBuilder0<R> implements PageStreamBuilder<R> {
+  static class Paging2<T1, T2, R> implements Paging<R> {
 
     @NonNull
-    private final Function1<Pageable, Page<R>> fetcher;
+    private final Function3<T1, T2, Pageable, Page<R>> fetcher;
+    @NonNull
+    private final Tuple2<T1, T2> args;
     @NonNull
     private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher0<>(fetcher), pageable),
+          new PageSpliterator<>(new PageFetcher2<>(fetcher, args), pageable),
           false);
     }
   }
