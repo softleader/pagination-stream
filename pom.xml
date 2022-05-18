@@ -77,7 +77,7 @@
     <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
     <license-maven-plugin.version>4.1</license-maven-plugin.version>
 
-    <spring-boot.version>2.6.3</spring-boot.version>
+    <spring-boot.version>2.6.7</spring-boot.version>
 
     <softleader.releases.repository>http://svn.softleader.com.tw:8084/repository/maven-releases/
     </softleader.releases.repository>

@@ -20,7 +20,6 @@
  */
 package tw.com.softleader.data.stream.support;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -32,8 +31,8 @@ import org.jooq.lambda.tuple.Tuple10;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
-import tw.com.softleader.data.stream.PageFetcher10;
 import tw.com.softleader.data.stream.PageSpliterator;
+import tw.com.softleader.data.stream.PageStreamBuilder;
 
 /**
  * @author Matt Ho
@@ -47,13 +46,13 @@ public class PageSupportFetcher10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> {
     this.fetcher = fetcher;
   }
 
-  public PageSupportArgs<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> args(
+  public PageStreamBuilder<R> args(
       @NonNull Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args,
       @NonNull Pageable pageable) {
-    return new PageSupportArgs<>(fetcher, args, pageable);
+    return new PageStreamBuilder10<>(fetcher, args, pageable);
   }
 
-  public PageSupportArgs<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> args(
+  public PageStreamBuilder<R> args(
       @Nullable T1 arg1,
       @Nullable T2 arg2,
       @Nullable T3 arg3,
@@ -71,7 +70,8 @@ public class PageSupportFetcher10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> {
   }
 
   @AllArgsConstructor(access = AccessLevel.PACKAGE)
-  public static class PageSupportArgs<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> {
+  static class PageStreamBuilder10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> implements
+      PageStreamBuilder<R> {
 
     @NonNull
     private final Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher;
@@ -80,15 +80,11 @@ public class PageSupportFetcher10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> {
     @NonNull
     private final Pageable pageable;
 
+    @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
           new PageSpliterator<>(new PageFetcher10<>(fetcher, args), pageable),
           false);
-    }
-
-    public Stream<R> stream() {
-      return pagedStream()
-          .flatMap(Collection::stream);
     }
   }
 }

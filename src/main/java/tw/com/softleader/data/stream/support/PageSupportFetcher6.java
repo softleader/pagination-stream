@@ -20,7 +20,6 @@
  */
 package tw.com.softleader.data.stream.support;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -32,8 +31,8 @@ import org.jooq.lambda.tuple.Tuple6;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
-import tw.com.softleader.data.stream.PageFetcher6;
 import tw.com.softleader.data.stream.PageSpliterator;
+import tw.com.softleader.data.stream.PageStreamBuilder;
 
 /**
  * @author Matt Ho
@@ -47,13 +46,13 @@ public class PageSupportFetcher6<T1, T2, T3, T4, T5, T6, R> {
     this.fetcher = fetcher;
   }
 
-  public PageSupportArgs<T1, T2, T3, T4, T5, T6, R> args(
+  public PageStreamBuilder<R> args(
       @NonNull Tuple6<T1, T2, T3, T4, T5, T6> args,
       @NonNull Pageable pageable) {
-    return new PageSupportArgs<>(fetcher, args, pageable);
+    return new PageStreamBuilder6<>(fetcher, args, pageable);
   }
 
-  public PageSupportArgs<T1, T2, T3, T4, T5, T6, R> args(
+  public PageStreamBuilder<R> args(
       @Nullable T1 arg1,
       @Nullable T2 arg2,
       @Nullable T3 arg3,
@@ -67,7 +66,7 @@ public class PageSupportFetcher6<T1, T2, T3, T4, T5, T6, R> {
   }
 
   @AllArgsConstructor(access = AccessLevel.PACKAGE)
-  public static class PageSupportArgs<T1, T2, T3, T4, T5, T6, R> {
+  static class PageStreamBuilder6<T1, T2, T3, T4, T5, T6, R> implements PageStreamBuilder<R> {
 
     @NonNull
     private final Function7<T1, T2, T3, T4, T5, T6, Pageable, Page<R>> fetcher;
@@ -76,15 +75,11 @@ public class PageSupportFetcher6<T1, T2, T3, T4, T5, T6, R> {
     @NonNull
     private final Pageable pageable;
 
+    @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
           new PageSpliterator<>(new PageFetcher6<>(fetcher, args), pageable),
           false);
-    }
-
-    public Stream<R> stream() {
-      return pagedStream()
-          .flatMap(Collection::stream);
     }
   }
 }
