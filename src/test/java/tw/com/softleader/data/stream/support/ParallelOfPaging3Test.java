@@ -34,8 +34,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import tw.com.softleader.data.stream.support.OfPaging3;
 
-class OfPaging3Test {
+class ParallelOfPaging3Test {
 
   static final int TOTAL_PAGES = 5;
 
@@ -47,6 +48,7 @@ class OfPaging3Test {
     var sum = new OfPaging3<>(api::call)
         .args(10, 2, 3, pageable)
         .stream()
+        .parallel()
         .mapToLong(Long::longValue)
         .sum();
 

@@ -47,7 +47,6 @@ class OfPaging4Test {
     var sum = new OfPaging4<>(api::call)
         .args(10, 2, 3, 4, pageable)
         .stream()
-        .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
         .mapToLong(Long::longValue)
         .sum();
 
