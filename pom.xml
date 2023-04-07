@@ -17,9 +17,9 @@
   </organization>
 
   <scm>
-    <url>https://github.com/softleader/specification-mapper</url>
-    <connection>scm:git:git@github.com:softleader/specification-mapper.git</connection>
-    <developerConnection>scm:git:git@github.com:softleader/specification-mapper.git
+    <url>https://github.com/softleader/pagination-stream</url>
+    <connection>scm:git:git@github.com:softleader/pagination-stream.git</connection>
+    <developerConnection>scm:git:git@github.com:softleader/pagination-stream.git
     </developerConnection>
   </scm>
 
@@ -80,7 +80,7 @@
     <spring-boot.version>2.7.10</spring-boot.version>
 
     <softleader-releases>https://repo.softleader.com.tw/repository/maven-releases/</softleader-releases>
-    <softleader-public>https://repo.softleader.com.tw:8084/repository/maven-public/</softleader-public>
+    <softleader-public>https://repo.softleader.com.tw/repository/maven-public/</softleader-public>
     <spring-milestones>https://repo.spring.io/milestone</spring-milestones>
     <spring-release>https://repo.spring.io/release</spring-release>
 
