@@ -95,13 +95,13 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     if (isPageEmpty() || onlyOnePage()) {
       return null;
     }
+    if (isLastPage()) { // 排到最後一頁就不切分了
+      fetched.set(false); // 但還是要讓後續的 tryAdvance 去取資料
+      return null;
+    }
     if (isFirstPage()) {
       pageable = pageable.next();
       return new FetchedSinglePageSpliterator<>(page);
-    }
-    if (isLastPage()) {
-      fetched.set(false); // 排到最後一頁必須讓後續的 tryAdvance 會在實際去取資料
-      return null;
     }
     var split = new SinglePageSpliterator<T>(fetcher,
         PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
