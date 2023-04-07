@@ -20,11 +20,14 @@
  */
 package tw.com.softleader.data.stream;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -42,10 +45,9 @@ class SinglePageSpliterator<T> implements Spliterator<List<T>> {
 
   @Override
   public boolean tryAdvance(Consumer<? super List<T>> action) {
-    var page = fetcher.fetch(pageable);
-    if (page != null) {
-      action.accept(page.getContent());
-    }
+    ofNullable(fetcher.fetch(pageable))
+        .map(Page::getContent)
+        .ifPresent(action);
     return false;
   }
 

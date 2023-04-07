@@ -20,7 +20,10 @@
  */
 package tw.com.softleader.data.stream;
 
+import static java.util.Optional.ofNullable;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
@@ -40,9 +43,9 @@ class FetchedPageSpliterator<T> implements Spliterator<List<T>> {
 
   @Override
   public boolean tryAdvance(Consumer<? super List<T>> action) {
-    if (page != null) {
-      action.accept(page.getContent());
-    }
+    ofNullable(page)
+        .map(Page::getContent)
+        .ifPresent(action);
     return false;
   }
 
