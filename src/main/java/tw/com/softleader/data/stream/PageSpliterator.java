@@ -103,7 +103,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
       pageable = pageable.next();
       return new FetchedSinglePageSpliterator<>(page);
     }
-    var split = new SinglePageSpliterator<T>(fetcher,
+    var split = new SinglePageSpliterator<>(fetcher,
         PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
     pageable = pageable.next();
     return split;
