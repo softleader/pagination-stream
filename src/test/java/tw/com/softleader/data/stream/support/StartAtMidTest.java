@@ -22,7 +22,6 @@ package tw.com.softleader.data.stream.support;
 
 import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -34,56 +33,51 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import tw.com.softleader.data.stream.support.OfPaging0Test.Api;
 
-class OfPaging6Test {
+class StartAtMidTest {
 
   static final int TOTAL_PAGES = 5;
+  static final int STARTING_AT = 2;
 
   @Test
   void testSequential() {
-    var api = spy(Api.class);
-    var pageable = Pageable.ofSize(10);
+    var api = spy(OfPaging0Test.Api.class);
+    var pageable = Pageable.ofSize(10).withPage(STARTING_AT);
 
-    var sum = new OfPaging6<>(api::call)
-        .args(10, 2, 3, 4, 5, 6, pageable)
+    var sum = new OfPaging0<>(api::call).args(pageable)
         .stream()
         .mapToLong(Long::longValue)
         .sum();
 
     Assertions.assertThat(sum).isEqualTo(
-        ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2 * 3 * 4 * 5 * 6);
+        (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
 
-    verify(api, times(1)).call(10, 2, 3, 4, 5, 6, pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES)).call(
-        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), any(Pageable.class));
+    verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES - STARTING_AT)).call(any(Pageable.class));
   }
 
   @Test
   void testParallel() {
-    var api = spy(Api.class);
-    var pageable = Pageable.ofSize(10);
+    var api = spy(OfPaging0Test.Api.class);
+    var pageable = Pageable.ofSize(10).withPage(STARTING_AT);
 
-    var sum = new OfPaging6<>(api::call)
-        .args(10, 2, 3, 4, 5, 6, pageable)
+    var sum = new OfPaging0<>(api::call).args(pageable)
         .stream()
         .parallel()
         .mapToLong(Long::longValue)
         .sum();
 
     Assertions.assertThat(sum).isEqualTo(
-        ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2 * 3 * 4 * 5 * 6);
+        (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
 
-    verify(api, times(1)).call(10, 2, 3, 4, 5, 6, pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES)).call(
-        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), any(Pageable.class));
+    verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES - STARTING_AT)).call(any(Pageable.class));
   }
 
   static class Api {
 
-    Page<Long> call(int a, int b, int c, int d, int e, int f,
-        Pageable pageable) {
+    Page<Long> call(Pageable pageable) {
       var pageAt = pageable.getPageNumber(); // start from 0
 
       if (pageAt >= TOTAL_PAGES) {
@@ -93,11 +87,9 @@ class OfPaging6Test {
       // fake data
       var data = LongStream.rangeClosed(0, pageAt + 1)
           .boxed()
-          .map(l -> l * a * b * c * d * e * f)
           .collect(toList());
 
       return new PageImpl<>(data, pageable, pageable.getPageSize() * (long) TOTAL_PAGES);
     }
   }
-
 }

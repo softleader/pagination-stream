@@ -40,14 +40,34 @@ class OfPaging10Test {
   static final int TOTAL_PAGES = 5;
 
   @Test
-  void test() {
+  void testSequential() {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
     var sum = new OfPaging10<>(api::call)
         .args(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable)
         .stream()
-        .parallel() // 雖然當前不支援, 但還是可以呼叫 parallel 只是沒作用而已
+        .mapToLong(Long::longValue)
+        .sum();
+
+    Assertions.assertThat(sum).isEqualTo(
+        (long) ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
+            * 10 * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 101);
+
+    verify(api, times(1)).call(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES)).call(
+        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), eq(7), eq(8), eq(9), eq(101), any(Pageable.class));
+  }
+
+  @Test
+  void testParallel() {
+    var api = spy(Api.class);
+    var pageable = Pageable.ofSize(10);
+
+    var sum = new OfPaging10<>(api::call)
+        .args(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable)
+        .stream()
+        .parallel()
         .mapToLong(Long::longValue)
         .sum();
 
