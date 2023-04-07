@@ -40,7 +40,7 @@ import org.springframework.data.domain.Pageable;
  * <p>
  * 在併行 (Parallel) 的情境中, 會先同步的取回第一次資料 (P1) 以作為拆分基礎, 假設 P1 取回的資料顯示共有 4 個分頁（P1, P2, P3, P4）, 之後的 3
  * 個分頁會被拆分成多個 Spliterator (S1, S2, S3）。每個拆分的 Spliterator 都會是一個子任務可以被獨立地執行。
- * 
+ *
  * <pre>
  * <code>
  *  +-----+-----+-----+-----+
@@ -138,6 +138,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     }
     page = fetcher.fetch(pageable);
     if (page != null) {
+      pageable = page.getPageable();
       totalPages = page.getTotalPages();
     }
     fetched.set(true);
