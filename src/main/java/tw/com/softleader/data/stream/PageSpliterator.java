@@ -62,10 +62,10 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
   private static final long TOO_EXPENSIVE_TO_COMPUTE = Long.MAX_VALUE;
 
   private final PageFetcher<T> fetcher;
-  private final int firstPageNumber;
+  private final int firstPageNumber; // 從 0 開始
   private final AtomicBoolean fetched = new AtomicBoolean(); // 防止同一頁被重複執行損失效能
   private Pageable pageable;
-  private Integer totalPages;
+  private Integer totalPages; // 從 1 開始
   private Page<T> page;
 
   public PageSpliterator(@NonNull PageFetcher<T> fetcher, @NonNull Pageable pageable) {
@@ -92,21 +92,25 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
   @Override
   public Spliterator<List<T>> trySplit() {
     prefetch();
-    if (isPageEmpty()) {
-      return null;
-    }
-    if (isLastPage()) {
-      fetched.set(false);
+    if (isPageEmpty() || onlyOnePage()) {
       return null;
     }
     if (isFirstPage()) {
       pageable = pageable.next();
       return new FetchedSinglePageSpliterator<>(page);
     }
+    if (isLastPage()) {
+      fetched.set(false); // 排到最後一頁必須讓後續的 tryAdvance 會在實際去取資料
+      return null;
+    }
     var split = new SinglePageSpliterator<T>(fetcher,
         PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
     pageable = pageable.next();
     return split;
+  }
+
+  private boolean onlyOnePage() {
+    return isFirstPage() && isLastPage();
   }
 
   private boolean isPageEmpty() {
