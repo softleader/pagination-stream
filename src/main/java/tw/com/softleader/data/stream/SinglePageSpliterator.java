@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
 /**
- * 單頁 {@link Spliterator}, 會使用 {@link #fetcher} 及 {@link #pageable} 取得一次資料
+ * 單頁的 {@link Spliterator}, 會使用 {@link #fetcher} 及 {@link #pageable} 執行一次並取得資料
  *
  * @author Matt Ho
  */
