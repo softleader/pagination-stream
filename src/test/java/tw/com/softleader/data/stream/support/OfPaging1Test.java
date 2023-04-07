@@ -40,12 +40,31 @@ class OfPaging1Test {
   static final int TOTAL_PAGES = 5;
 
   @Test
-  void test() {
+  void testSequential() {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
     var sum = new OfPaging1<>(api::call).args(10, pageable)
         .stream()
+        .mapToLong(Long::longValue)
+        .sum();
+
+    Assertions.assertThat(sum).isEqualTo(
+        ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
+            * 10);
+
+    verify(api, times(1)).call(10, pageable); // 第一次的分頁應該只 fetch 一次
+    verify(api, times(TOTAL_PAGES)).call(eq(10), any(Pageable.class));
+  }
+
+  @Test
+  void testParallel() {
+    var api = spy(Api.class);
+    var pageable = Pageable.ofSize(10);
+
+    var sum = new OfPaging1<>(api::call).args(10, pageable)
+        .stream()
+        .parallel()
         .mapToLong(Long::longValue)
         .sum();
 

@@ -35,8 +35,25 @@ import org.springframework.data.domain.Pageable;
  * 這是一個用來處理資料分頁的 {@link Spliterator}，它幫助我們從資料庫或網路上取得大量的資料，然後分批處理，避免一次處理太多而導致記憶體不足。
  *
  * <p>
- * 在並行 (parallel) 或非並行的情境中, 這隻程式都一定會執行第一次的 {@link #prefetch()} 以取得分頁基礎, 若為 parallel 情境, 會透過
- * {@link #trySplit()} 試著將所有分頁切出子任務
+ * 在同步 (Sequential) 的情境中, 會依照分頁的順序來逐次的取得資料
+ *
+ * <p>
+ * 在併行 (Parallel) 的情境中, 會先同步的取回第一次資料 (P1) 以作為拆分基礎, 假設 P1 取回的資料顯示共有 4 個分頁（P1, P2, P3, P4）, 之後的 3
+ * 個分頁會被拆分成多個 Spliterator (S1, S2, S3）。每個拆分的 Spliterator 都會是一個子任務可以被獨立地執行。
+ * 
+ * <pre>
+ * <code>
+ *  +-----+-----+-----+-----+
+ *  |  P1 |  P2 |  P3 |  P4 |
+ *  +-----+-----+-----+-----+
+ *            |     |     |
+ *            |     |     |
+ *            v     v     v
+ *         +-----+-----+-----+
+ *         |  S1 |  S2 |  S3 |
+ *         +-----+-----+-----+
+ * </code>
+ * </pre>
  *
  * @author Matt Ho
  */
@@ -45,6 +62,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
   private static final long TOO_EXPENSIVE_TO_COMPUTE = Long.MAX_VALUE;
 
   private final PageFetcher<T> fetcher;
+  private final int firstPageNumber;
   private final AtomicBoolean fetched = new AtomicBoolean(); // 防止同一頁被重複執行損失效能
   private Pageable pageable;
   private Integer totalPages;
@@ -53,6 +71,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
   public PageSpliterator(@NonNull PageFetcher<T> fetcher, @NonNull Pageable pageable) {
     this.fetcher = fetcher;
     this.pageable = pageable;
+    this.firstPageNumber = pageable.getPageNumber();
   }
 
   @Override
@@ -73,11 +92,14 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
   @Override
   public Spliterator<List<T>> trySplit() {
     prefetch();
-    if (isPageEmpty() || isLastPage()) {
+    if (isPageEmpty()) {
+      return null;
+    }
+    if (isLastPage()) {
       fetched.set(false);
       return null;
     }
-    if (pageable.getPageNumber() == 0) {
+    if (isFirstPage()) {
       pageable = pageable.next();
       return new FetchedSinglePageSpliterator<>(page);
     }
@@ -93,6 +115,10 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
 
   private boolean isLastPage() {
     return totalPages != null && pageable.getPageNumber() + 1 >= totalPages;
+  }
+
+  private boolean isFirstPage() {
+    return pageable.getPageNumber() == firstPageNumber;
   }
 
   @Override

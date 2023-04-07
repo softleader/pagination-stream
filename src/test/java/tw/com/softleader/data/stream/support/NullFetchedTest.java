@@ -32,12 +32,28 @@ import org.springframework.data.domain.Pageable;
 class NullFetchedTest {
 
   @Test
-  void test() {
+  void testSequential() {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
     var sum = new OfPaging0<>(api::call).args(pageable)
         .stream()
+        .mapToLong(Long::longValue)
+        .sum();
+
+    Assertions.assertThat(sum).isEqualTo(0);
+
+    verify(api, times(1)).call(pageable);
+  }
+
+  @Test
+  void testParallel() {
+    var api = spy(Api.class);
+    var pageable = Pageable.ofSize(10);
+
+    var sum = new OfPaging0<>(api::call).args(pageable)
+        .stream()
+        .parallel()
         .mapToLong(Long::longValue)
         .sum();
 
