@@ -28,10 +28,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 
 /**
+ * 已取回 {@link #page} 的 {@link Spliterator}
+ *
  * @author Matt Ho
  */
 @RequiredArgsConstructor
-class FetchedSinglePageSpliterator<T> implements Spliterator<List<T>> {
+class FetchedPageSpliterator<T> implements Spliterator<List<T>> {
 
   @Nullable
   final Page<T> page;
