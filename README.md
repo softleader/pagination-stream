@@ -75,7 +75,7 @@ fetcher.args(10, 11L, "12", Pageable.ofSize(10))
 
 ### Parallel
 
-`PageSupport` 也支援 Parallel Stream 的情境, 讓不需要分頁順序的情境中, 可以有更佳效能表現的可能性, 例如:
+`PageSupport` 也支援 Parallel Stream 的情境, 讓不需要分頁順序的情境中, 有更佳效能表現的可能性, 例如:
 
 ```java
 PageSupport
