@@ -33,17 +33,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import tw.com.softleader.data.stream.support.OfPaging0Test.Api;
 
 class StartAtMidTest {
 
   static final int TOTAL_PAGES = 5;
-  static final int STARTING_AT = 2;
+  static final int STARTING_PAGE = 2;
 
   @Test
   void testSequential() {
-    var api = spy(OfPaging0Test.Api.class);
-    var pageable = Pageable.ofSize(10).withPage(STARTING_AT);
+    var api = spy(Api.class);
+    var pageable = Pageable.ofSize(10).withPage(STARTING_PAGE);
 
     var sum = new OfPaging0<>(api::call).args(pageable)
         .stream()
@@ -54,13 +53,13 @@ class StartAtMidTest {
         (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
 
     verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES - STARTING_AT)).call(any(Pageable.class));
+    verify(api, times(TOTAL_PAGES - STARTING_PAGE)).call(any(Pageable.class));
   }
 
   @Test
   void testParallel() {
-    var api = spy(OfPaging0Test.Api.class);
-    var pageable = Pageable.ofSize(10).withPage(STARTING_AT);
+    var api = spy(Api.class);
+    var pageable = Pageable.ofSize(10).withPage(STARTING_PAGE);
 
     var sum = new OfPaging0<>(api::call).args(pageable)
         .stream()
@@ -72,7 +71,7 @@ class StartAtMidTest {
         (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
 
     verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES - STARTING_AT)).call(any(Pageable.class));
+    verify(api, times(TOTAL_PAGES - STARTING_PAGE)).call(any(Pageable.class));
   }
 
   static class Api {
