@@ -103,7 +103,7 @@ PageSupport
 1. 會先同步 (Sequential) 的取回第一次分頁資訊, 以作為拆分子任務的基礎
 2. 子任務處理的最小單位是每一個分頁 (Page)
 3. 每個子任務不一定是獨立的 Thread 去執行, 這部分回歸 Java 的 [Parallelism 機制](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)去處理
-4. Java 提供的 [ExecutorService](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ExecutorService.html) 等控制方式都是可以使用
+4. 呈上, 建議使用 Java 提供的 [ExecutorService](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ExecutorService.html) 等機制做更精準的控制
 
 ## Example
 
