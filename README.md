@@ -84,7 +84,7 @@ PageSupport
   ...
 ```
 
-在 Parallel 情境中,  會先同步 (Sequential) 的取回第一次資料含分頁資訊 (*P1*) 作為拆分基礎, 假設 *P1* 取回的資料顯示共有 4 個分頁 (*P1, P2, P3, P4*), 之後的 3 個分頁會被拆分成多個 Spliterator (*S1, S2, S3*)。每個拆分的 Spliterator 都會是一個子任務可以被獨立地執行。
+在 Parallel 情境中,  會先同步 (Sequential) 的取回第一次資料含分頁資訊 (*P1*) 作為拆分基礎, 假設 *P1* 取回的資料顯示共有 4 個分頁 (*P1, P2, P3, P4*), 之後的 3 個分頁會被拆分成多個 [Spliterator](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Spliterator.html) (*S1, S2, S3*), aka 子任務。每個拆分的 Spliterator 都會是一個子任務可以被獨立地執行。
 
 ```
 +-----+-----+-----+-----+ 
@@ -100,7 +100,7 @@ PageSupport
 
 總結以上, Parallel 的重點摘錄如下:
 
-1. 會先同步 (Sequential) 的取回第一次分頁資訊, 以作為拆分子任務的基礎
+1. 會先同步 (Sequential) 的取回第一次分頁資訊, 以作為拆分 Spliterator (子任務) 的基礎
 2. 子任務處理的最小單位是每一個分頁 (Page)
 3. 每個子任務不一定是獨立的 Thread 去執行, 這部分回歸 Java 的 [Parallelism 機制](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)去處理
 4. 呈上, 建議使用 Java 提供的 [ExecutorService](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ExecutorService.html) 等機制做更精準的控制
