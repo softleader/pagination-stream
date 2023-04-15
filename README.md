@@ -108,9 +108,9 @@ PageSupport
 
 #### Performance Impact
 
-請注意, 使用 Parallel 並不能一定有更好的效能, 畢竟我們還要考慮到很多因素, 像是 Thread 的建立或管理成本等等, 在更多的情境中甚至有可能效能不升反降, 這部分請務必注意
+請注意, 使用 Parallel 並不能一定有更好的效能, 畢竟我們還要考慮到很多因素, 像是 Thread 的建立或管理成本等等, 在更多的情境中甚至有可能效能不升反降, 這部分請務必注意!
 
-建議使用錢, 先做更多的延伸閱讀:
+使用之前, 先做更多的延伸閱讀:
 
 - [When to Use a Parallel Stream in Java](https://www.baeldung.com/java-when-to-use-parallel-stream)
 - [Parallel streams in Java: Benchmarking and performance considerations](https://blogs.oracle.com/javamagazine/post/java-parallel-streams-performance-benchmark)
