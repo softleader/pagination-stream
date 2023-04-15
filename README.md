@@ -133,7 +133,7 @@ class DifficultCalculationService {
 
 ### Page Form Remote API
 
-承 [Page Form Repository](#page-form-repository), 假設資料來自於一個遠端的 API 呼叫, 且使用 [OpenFeign](https://spring.io/projects/spring-cloud-openfeign) 來執行, 則程式碼範例如下:
+假設資料來自於一個遠端的 API 呼叫, 且使用 [OpenFeign](https://spring.io/projects/spring-cloud-openfeign) 來執行, 則程式碼範例如下:
 
 ```java
 @FeignClient(name = "person-api", url = "http://somewhere/out/there")
