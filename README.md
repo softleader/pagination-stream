@@ -159,7 +159,7 @@ class DifficultCalculationService {
 
 ## Caution
 
-**建議在撰寫程式時, 都要儘可能地使用 Streaming 的方式去處理資料, 以避免記憶體 OOM!**
+**建議在撰寫程式時, 都要儘可能的使用 Streaming 的方式去處理資料, 以避免記憶體 OOM!**
 
 當你需要在建立 *Page Stream* 後馬上使用到  `.collect(Collectors.toList())` 等收集的 stream api 時, 這就是一個警訊了, 一定要再思考是否有更好的方式處理!
 
