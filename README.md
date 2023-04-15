@@ -84,7 +84,7 @@ PageSupport
   ...
 ```
 
-在 Parallel 情境中,  會先同步 (Sequential) 的取回第一次資料含分頁資訊 (*P1*) 作為拆分基礎, 假設 *P1* 取回的資料顯示共有 4 個分頁 (*P1, P2, P3, P4*), 之後的 3 個分頁會被拆分成多個 [Spliterator](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Spliterator.html) (*S1, S2, S3*), aka 子任務。每個拆分的 Spliterator 都會是一個子任務可以被獨立地執行。
+在 Parallel 情境中,  會先同步 (Sequential) 的取回第一次資料含分頁資訊 (*P1*) 作為拆分基礎, 假設 *P1* 取回的資料顯示共有 4 個分頁 (*P1, P2, P3, P4*), 之後的 3 個分頁會被拆分成多個 [Spliterator](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Spliterator.html) (*S1, S2, S3*)。每個拆分的 Spliterator 都會是一個子任務可以被獨立的執行。
 
 ```
 +-----+-----+-----+-----+ 
