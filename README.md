@@ -75,7 +75,7 @@ fetcher.args(10, 11L, "12", Pageable.ofSize(10))
 
 ### Parallel
 
-`PageSupport` 也支援 Parallel Stream 的情境, 讓不需要分頁順序的情境中, 有更佳效能表現的可能性, 例如:
+`PageSupport` 也支援 Parallel Stream 的情境, 讓不需要分頁順序的情境中, 有更佳效能表現的[*可能性*](#performance-impact), 例如:
 
 ```java
 PageSupport
@@ -104,6 +104,17 @@ PageSupport
 2. 子任務處理的最小單位是每一個分頁 (Page)
 3. 每個子任務不一定是獨立的 Thread 去執行, 這部分回歸 Java 的 [Parallelism 機制](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)去處理
 4. 呈上, 建議使用 Java 提供的 [ExecutorService](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ExecutorService.html) 等機制做更精準的控制
+
+
+#### Performance Impact
+
+請注意, 使用 Parallel 並不能一定有更好的效能, 畢竟我們還要考慮到很多因素, 像是 Thread 的建立或管理成本等等, 在更多的情境中甚至有可能效能不升反降, 這部分請務必注意
+
+建議使用錢, 先做更多的延伸閱讀:
+
+- [When to Use a Parallel Stream in Java](https://www.baeldung.com/java-when-to-use-parallel-stream)
+- [Parallel streams in Java: Benchmarking and performance considerations](https://blogs.oracle.com/javamagazine/post/java-parallel-streams-performance-benchmark)
+- [Seasoned Java Developers Should Know These 5 Practices to Improve Parallel Stream Execution](https://blog.devgenius.io/seasoned-java-developers-should-know-these-5-practices-to-improve-parallel-stream-execution-602cc50c9aca)
 
 ## Example
 
