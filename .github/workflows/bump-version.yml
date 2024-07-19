@@ -1,4 +1,3 @@
-# specification-mapper 進版
 name: Bump Version
 
 on:
@@ -71,7 +70,7 @@ jobs:
     if: ${{ !failure() }}
     needs: ensure-version-not-exists
     steps:
-      - id: specification-mapper-bump-version
+      - id: pagination-stream-bump-version
         uses: shihyuho/go-jenkins-trigger@v1
         with:
           jenkins-url: "${{ secrets.JENKINS_URL }}"
