@@ -23,10 +23,12 @@
   <distributionManagement>
     <repository>
       <id>releases</id>
-      <url>${softleader-releases}</url>
+      <name>SoftLeader Release</name>
+      <url>${softleader.releases.repository}</url>
     </repository>
     <snapshotRepository>
       <id>snapshots</id>
+      <name>SoftLeader Snapshots</name>
       <url>${softleader.snapshots.repository}</url>
     </snapshotRepository>
   </distributionManagement>
@@ -38,20 +40,22 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
     <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
     <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
-    <license-maven-plugin.version>4.1</license-maven-plugin.version>
+    <license-maven-plugin.version>4.3</license-maven-plugin.version>
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
 
-    <spring-boot.version>2.7.10</spring-boot.version>
+    <spring-boot.version>2.7.18</spring-boot.version>
 
-    <softleader-releases>https://repo.softleader.com.tw/repository/maven-releases/</softleader-releases>
-    <softleader-public>https://repo.softleader.com.tw/repository/maven-public/</softleader-public>
-    <spring-milestones>https://repo.spring.io/milestone</spring-milestones>
-    <spring-release>https://repo.spring.io/release</spring-release>
+    <softleader.public.repository>https://repo.softleader.com.tw/repository/maven-public/</softleader.public.repository>
+    <softleader.releases.repository>https://repo.softleader.com.tw/repository/maven-releases/</softleader.releases.repository>
+    <softleader.snapshots.repository>https://repo.softleader.com.tw/repository/maven-snapshots/</softleader.snapshots.repository>
+    <spring-snapshot.repository>https://repo.spring.io/snapshot</spring-snapshot.repository>
+    <spring-milestones.repository>https://repo.spring.io/milestone</spring-milestones.repository>
+    <spring-release.repository>https://repo.spring.io/release</spring-release.repository>
 
     <skip.formatting>false</skip.formatting>
     <jool.version>0.9.15</jool.version>
@@ -94,12 +98,9 @@
 
   <repositories>
     <repository>
-      <id>releases</id>
-      <url>${softleader-releases}</url>
-    </repository>
-    <repository>
-      <id>snapshots</id>
-      <url>${softleader-public}</url>
+      <id>softleader-public</id>
+      <name>SoftLeader Public</name>
+      <url>${softleader.public.repository}</url>
     </repository>
     <repository>
       <snapshots>
@@ -107,12 +108,15 @@
       </snapshots>
       <id>spring-milestones</id>
       <name>Spring Milestones</name>
-      <url>${spring-milestones}</url>
+      <url>${spring-milestones.repository}</url>
     </repository>
     <repository>
-      <id>spring-release</id>
-      <name>Spring Release</name>
-      <url>${spring-release}</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <id>spring-snapshots</id>
+      <name>Spring Snapshots</name>
+      <url>${spring-snapshot.repository}</url>
     </repository>
   </repositories>
 

@@ -23,8 +23,8 @@ test: clean ## Clean and test the compiled code.
 install: clean ## Install project to local repository w/o unit testing.
 	mvn install -e -DskipTests -Prelease
 
-bump-deps: ## Bump dependencies to the latest version (excluding Spring & maven plugins).
-	mvn versions:update-properties -DexcludeProperties=spring-boot.version,spring-cloud.version,*plugin.version
+bump-deps: ## Bump dependencies to the latest version (excluding Spring).
+	mvn versions:update-properties -DexcludeProperties=spring-boot.version
 	mvn versions:commit
 
 ##@ Delivery
