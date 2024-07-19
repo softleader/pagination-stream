@@ -1,5 +1,6 @@
 [![](https://img.shields.io/badge/docs-中文版-blue?style=for-the-badge)](./README.zh-tw.md)
 [![version](https://img.shields.io/github/v/release/softleader/pagination-stream?style=for-the-badge&color=brightgreen&sort=semver)](https://github.com/softleader/pagination-stream/releases)
+[![Maven Central](https://img.shields.io/maven-central/v/tw.com.softleader.data/pagination-stream?style=for-the-badge&color=orange)](https://central.sonatype.com/search?q=g%3Atw.com.softleader.data&smo=true&namespace=tw.com.softleader.data)
 
 # pagination-stream
 

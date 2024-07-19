@@ -6,14 +6,26 @@
   <artifactId>pagination-stream</artifactId>
   <version>1.0.4</version>
 
+  <name>pagination-stream</name>
   <description>Pagination stream API for Spring Data</description>
+  <url>https://github.com/softleader/pagination-stream</url>
   <inceptionYear>2022</inceptionYear>
-
   <organization>
     <name>SoftLeader</name>
-    <url>http://www.softleader.com.tw</url>
+    <url>https://www.softleader.com.tw</url>
   </organization>
-
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Matt Ho</name>
+      <email>matt.ho@softleader.com.tw</email>
+    </developer>
+  </developers>
   <scm>
     <connection>scm:git:git@github.com:softleader/pagination-stream.git</connection>
     <developerConnection>scm:git:git@github.com:softleader/pagination-stream.git</developerConnection>
@@ -22,14 +34,12 @@
 
   <distributionManagement>
     <repository>
-      <id>releases</id>
-      <name>SoftLeader Release</name>
-      <url>${softleader.releases.repository}</url>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
-      <id>snapshots</id>
-      <name>SoftLeader Snapshots</name>
-      <url>${softleader.snapshots.repository}</url>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
@@ -47,16 +57,9 @@
     <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
     <license-maven-plugin.version>4.3</license-maven-plugin.version>
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
+    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
 
     <spring-boot.version>2.7.18</spring-boot.version>
-
-    <softleader.public.repository>https://repo.softleader.com.tw/repository/maven-public/</softleader.public.repository>
-    <softleader.releases.repository>https://repo.softleader.com.tw/repository/maven-releases/</softleader.releases.repository>
-    <softleader.snapshots.repository>https://repo.softleader.com.tw/repository/maven-snapshots/</softleader.snapshots.repository>
-    <spring-snapshot.repository>https://repo.spring.io/snapshot</spring-snapshot.repository>
-    <spring-milestones.repository>https://repo.spring.io/milestone</spring-milestones.repository>
-    <spring-release.repository>https://repo.spring.io/release</spring-release.repository>
-
     <skip.formatting>false</skip.formatting>
     <jool.version>0.9.15</jool.version>
   </properties>
@@ -98,25 +101,15 @@
 
   <repositories>
     <repository>
-      <id>softleader-public</id>
-      <name>SoftLeader Public</name>
-      <url>${softleader.public.repository}</url>
-    </repository>
-    <repository>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
       <id>spring-milestones</id>
-      <name>Spring Milestones</name>
-      <url>${spring-milestones.repository}</url>
+      <url>https://repo.spring.io/milestone</url>
     </repository>
     <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <id>spring-snapshots</id>
-      <name>Spring Snapshots</name>
-      <url>${spring-snapshot.repository}</url>
+      <id>spring-release</id>
+      <url>https://repo.spring.io/release</url>
     </repository>
   </repositories>
 
@@ -279,6 +272,24 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-site-plugin</artifactId>
             <version>${maven-site-plugin.version}</version>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${maven-gpg-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <phase>verify</phase>
+                <configuration>
+                  <keyname>${gpg.keyname}</keyname>
+                  <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                </configuration>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
