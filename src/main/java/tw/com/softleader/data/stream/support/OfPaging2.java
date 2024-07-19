@@ -43,39 +43,27 @@ import tw.com.softleader.data.stream.Paging;
 @RequiredArgsConstructor
 public class OfPaging2<T1, T2, R> {
 
-  @NonNull
-  private final Function3<T1, T2, Pageable, Page<R>> fetcher;
+  @NonNull private final Function3<T1, T2, Pageable, Page<R>> fetcher;
 
-  public Paging<R> args(
-      @NonNull Tuple2<T1, T2> args,
-      @NonNull Pageable pageable) {
+  public Paging<R> args(@NonNull Tuple2<T1, T2> args, @NonNull Pageable pageable) {
     return new Paging2<>(fetcher, args, pageable);
   }
 
-  public Paging<R> args(
-      @Nullable T1 arg1,
-      @Nullable T2 arg2,
-      @NonNull Pageable pageable) {
-    return args(
-        new Tuple2<>(arg1, arg2),
-        pageable);
+  public Paging<R> args(@Nullable T1 arg1, @Nullable T2 arg2, @NonNull Pageable pageable) {
+    return args(new Tuple2<>(arg1, arg2), pageable);
   }
 
   @RequiredArgsConstructor(access = PACKAGE)
   static class Paging2<T1, T2, R> implements Paging<R> {
 
-    @NonNull
-    private final Function3<T1, T2, Pageable, Page<R>> fetcher;
-    @NonNull
-    private final Tuple2<T1, T2> args;
-    @NonNull
-    private final Pageable pageable;
+    @NonNull private final Function3<T1, T2, Pageable, Page<R>> fetcher;
+    @NonNull private final Tuple2<T1, T2> args;
+    @NonNull private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher2<>(fetcher, args), pageable),
-          false);
+          new PageSpliterator<>(new PageFetcher2<>(fetcher, args), pageable), false);
     }
   }
 }

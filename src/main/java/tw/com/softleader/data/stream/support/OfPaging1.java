@@ -43,38 +43,27 @@ import tw.com.softleader.data.stream.Paging;
 @RequiredArgsConstructor
 public class OfPaging1<T1, R> {
 
-  @NonNull
-  private final Function2<T1, Pageable, Page<R>> fetcher;
+  @NonNull private final Function2<T1, Pageable, Page<R>> fetcher;
 
-  public Paging<R> args(
-      @NonNull Tuple1<T1> args,
-      @NonNull Pageable pageable) {
+  public Paging<R> args(@NonNull Tuple1<T1> args, @NonNull Pageable pageable) {
     return new Paging1<>(fetcher, args, pageable);
   }
 
-  public Paging<R> args(
-      @Nullable T1 arg1,
-      @NonNull Pageable pageable) {
-    return args(
-        new Tuple1<>(arg1),
-        pageable);
+  public Paging<R> args(@Nullable T1 arg1, @NonNull Pageable pageable) {
+    return args(new Tuple1<>(arg1), pageable);
   }
 
   @RequiredArgsConstructor(access = PACKAGE)
   static class Paging1<T1, R> implements Paging<R> {
 
-    @NonNull
-    private final Function2<T1, Pageable, Page<R>> fetcher;
-    @NonNull
-    private final Tuple1<T1> args;
-    @NonNull
-    private final Pageable pageable;
+    @NonNull private final Function2<T1, Pageable, Page<R>> fetcher;
+    @NonNull private final Tuple1<T1> args;
+    @NonNull private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher1<>(fetcher, args), pageable),
-          false);
+          new PageSpliterator<>(new PageFetcher1<>(fetcher, args), pageable), false);
     }
   }
 }

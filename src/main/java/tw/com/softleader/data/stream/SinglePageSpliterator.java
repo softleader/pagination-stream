@@ -38,16 +38,12 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 class SinglePageSpliterator<T> implements Spliterator<List<T>> {
 
-  @NonNull
-  final PageFetcher<T> fetcher;
-  @NonNull
-  final Pageable pageable;
+  @NonNull final PageFetcher<T> fetcher;
+  @NonNull final Pageable pageable;
 
   @Override
   public boolean tryAdvance(Consumer<? super List<T>> action) {
-    ofNullable(fetcher.fetch(pageable))
-        .map(Page::getContent)
-        .ifPresent(action);
+    ofNullable(fetcher.fetch(pageable)).map(Page::getContent).ifPresent(action);
     return false;
   }
 

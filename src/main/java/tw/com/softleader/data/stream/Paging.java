@@ -33,14 +33,37 @@ public interface Paging<R> {
 
   /**
    * Creates a new sequential {@code Stream} from {@code PageSpliterator} of every page
+   *
+   * @see #parallelPagedStream()
    */
   Stream<List<R>> pagedStream();
 
   /**
    * Creates a new sequential {@code Stream} from {@code PageSpliterator} of the results of each
    * element of {@link #pagedStream()}
+   *
+   * @see #parallelStream()
    */
   default Stream<R> stream() {
     return pagedStream().flatMap(Collection::stream);
+  }
+
+  /**
+   * Creates a new parallel sequential {@code Stream} from {@code PageSpliterator} of the results of
+   * each element of {@link #pagedStream()}
+   *
+   * @see #stream()
+   */
+  default Stream<R> parallelStream() {
+    return stream().parallel();
+  }
+
+  /**
+   * Creates a new parallel sequential {@code Stream} from {@code PageSpliterator} of every page
+   *
+   * @see #pagedStream()
+   */
+  default Stream<List<R>> parallelPagedStream() {
+    return pagedStream().parallel();
   }
 }

@@ -38,8 +38,8 @@ public class PageFetcher10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> implement
 
   @NonNull
   private final Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher;
-  @NonNull
-  private final Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args;
+
+  @NonNull private final Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args;
 
   @Override
   public Page<R> fetch(@NonNull Pageable pageable) {

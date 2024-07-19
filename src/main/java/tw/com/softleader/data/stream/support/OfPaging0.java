@@ -41,27 +41,22 @@ import tw.com.softleader.data.stream.Paging;
 @RequiredArgsConstructor
 public class OfPaging0<R> {
 
-  @NonNull
-  private final Function1<Pageable, Page<R>> fetcher;
+  @NonNull private final Function1<Pageable, Page<R>> fetcher;
 
-  public Paging<R> args(
-      @NonNull Pageable pageable) {
+  public Paging<R> args(@NonNull Pageable pageable) {
     return new Paging0<>(fetcher, pageable);
   }
 
   @RequiredArgsConstructor(access = PACKAGE)
   static class Paging0<R> implements Paging<R> {
 
-    @NonNull
-    private final Function1<Pageable, Page<R>> fetcher;
-    @NonNull
-    private final Pageable pageable;
+    @NonNull private final Function1<Pageable, Page<R>> fetcher;
+    @NonNull private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher0<>(fetcher), pageable),
-          false);
+          new PageSpliterator<>(new PageFetcher0<>(fetcher), pageable), false);
     }
   }
 }

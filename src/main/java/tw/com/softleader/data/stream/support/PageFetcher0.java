@@ -35,8 +35,7 @@ import tw.com.softleader.data.stream.PageFetcher;
 @AllArgsConstructor
 public class PageFetcher0<R> implements PageFetcher<R> {
 
-  @NonNull
-  private final Function1<Pageable, Page<R>> fetcher;
+  @NonNull private final Function1<Pageable, Page<R>> fetcher;
 
   @Override
   public Page<R> fetch(@NonNull Pageable pageable) {

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>tw.com.softleader.data</groupId>
   <artifactId>pagination-stream</artifactId>
   <version>1.0.4</version>
-  <inceptionYear>2022</inceptionYear>
 
   <description>Pagination stream API for Spring Data</description>
+  <inceptionYear>2022</inceptionYear>
 
   <organization>
     <name>SoftLeader</name>
@@ -17,27 +15,10 @@
   </organization>
 
   <scm>
-    <url>https://github.com/softleader/pagination-stream</url>
     <connection>scm:git:git@github.com:softleader/pagination-stream.git</connection>
-    <developerConnection>scm:git:git@github.com:softleader/pagination-stream.git
-    </developerConnection>
+    <developerConnection>scm:git:git@github.com:softleader/pagination-stream.git</developerConnection>
+    <url>https://github.com/softleader/pagination-stream</url>
   </scm>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>jcenter-snapshots</id>
-      <name>jcenter</name>
-      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>jcenter-releases</id>
-      <name>jcenter</name>
-      <url>http://jcenter.bintray.com</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
 
   <distributionManagement>
     <repository>
@@ -50,6 +31,32 @@
     </snapshotRepository>
   </distributionManagement>
 
+  <properties>
+    <java.version>11</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
+    <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
+    <license-maven-plugin.version>4.1</license-maven-plugin.version>
+    <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
+
+    <spring-boot.version>2.7.10</spring-boot.version>
+
+    <softleader-releases>https://repo.softleader.com.tw/repository/maven-releases/</softleader-releases>
+    <softleader-public>https://repo.softleader.com.tw/repository/maven-public/</softleader-public>
+    <spring-milestones>https://repo.spring.io/milestone</spring-milestones>
+    <spring-release>https://repo.spring.io/release</spring-release>
+
+    <skip.formatting>false</skip.formatting>
+    <jool.version>0.9.15</jool.version>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -61,56 +68,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <properties>
-    <java.version>11</java.version>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-    <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-    <formatter-maven-plugin.version>2.17.1</formatter-maven-plugin.version>
-    <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
-    <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
-    <license-maven-plugin.version>4.1</license-maven-plugin.version>
-
-    <spring-boot.version>2.7.10</spring-boot.version>
-
-    <softleader-releases>https://repo.softleader.com.tw/repository/maven-releases/</softleader-releases>
-    <softleader-public>https://repo.softleader.com.tw/repository/maven-public/</softleader-public>
-    <spring-milestones>https://repo.spring.io/milestone</spring-milestones>
-    <spring-release>https://repo.spring.io/release</spring-release>
-
-    <format.skip>false</format.skip>
-    <jool.version>0.9.15</jool.version>
-  </properties>
-
-  <repositories>
-    <repository>
-      <id>releases</id>
-      <url>${softleader-releases}</url>
-    </repository>
-    <repository>
-      <id>snapshots</id>
-      <url>${softleader-public}</url>
-    </repository>
-    <repository>
-      <id>spring-milestones</id>
-      <name>Spring Milestones</name>
-      <url>${spring-milestones}</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>spring-release</id>
-      <name>Spring Release</name>
-      <url>${spring-release}</url>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
@@ -135,6 +92,46 @@
     </dependency>
   </dependencies>
 
+  <repositories>
+    <repository>
+      <id>releases</id>
+      <url>${softleader-releases}</url>
+    </repository>
+    <repository>
+      <id>snapshots</id>
+      <url>${softleader-public}</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>spring-milestones</id>
+      <name>Spring Milestones</name>
+      <url>${spring-milestones}</url>
+    </repository>
+    <repository>
+      <id>spring-release</id>
+      <name>Spring Release</name>
+      <url>${spring-release}</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jcenter-snapshots</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>jcenter-releases</id>
+      <name>jcenter</name>
+      <url>http://jcenter.bintray.com</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -142,24 +139,6 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <version>${spring-boot.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>net.revelc.code.formatter</groupId>
-          <artifactId>formatter-maven-plugin</artifactId>
-          <version>${formatter-maven-plugin.version}</version>
-          <configuration>
-            <configFile>${maven.multiModuleProjectDirectory}/ide-config/eclipse-format.xml
-            </configFile>
-            <skip>${format.skip}</skip>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>process-sources</phase>
-              <goals>
-                <goal>format</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
         <plugin>
           <groupId>com.mycila</groupId>
@@ -220,6 +199,29 @@
       <plugin>
         <groupId>com.mycila</groupId>
         <artifactId>license-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless-maven-plugin.version}</version>
+        <configuration>
+          <applySkip>${skip.formatting}</applySkip>
+          <java>
+            <googleJavaFormat></googleJavaFormat>
+          </java>
+          <pom>
+            <sortPom></sortPom>
+          </pom>
+        </configuration>
+        <executions>
+          <execution>
+            <id>apply</id>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+            <phase>validate</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

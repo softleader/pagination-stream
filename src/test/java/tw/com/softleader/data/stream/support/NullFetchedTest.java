@@ -20,9 +20,7 @@
  */
 package tw.com.softleader.data.stream.support;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,10 +34,7 @@ class NullFetchedTest {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new OfPaging0<>(api::call).args(pageable)
-        .stream()
-        .mapToLong(Long::longValue)
-        .sum();
+    var sum = new OfPaging0<>(api::call).args(pageable).stream().mapToLong(Long::longValue).sum();
 
     Assertions.assertThat(sum).isEqualTo(0);
 
@@ -51,11 +46,8 @@ class NullFetchedTest {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new OfPaging0<>(api::call).args(pageable)
-        .stream()
-        .parallel()
-        .mapToLong(Long::longValue)
-        .sum();
+    var sum =
+        new OfPaging0<>(api::call).args(pageable).parallelStream().mapToLong(Long::longValue).sum();
 
     Assertions.assertThat(sum).isEqualTo(0);
 

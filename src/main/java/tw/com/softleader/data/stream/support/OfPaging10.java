@@ -47,8 +47,7 @@ public class OfPaging10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> {
   private final Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher;
 
   public Paging<R> args(
-      @NonNull Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args,
-      @NonNull Pageable pageable) {
+      @NonNull Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args, @NonNull Pageable pageable) {
     return new Paging10<>(fetcher, args, pageable);
   }
 
@@ -65,26 +64,22 @@ public class OfPaging10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> {
       @Nullable T10 arg10,
       @NonNull Pageable pageable) {
     return args(
-        new Tuple10<>(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10),
-        pageable);
+        new Tuple10<>(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10), pageable);
   }
 
   @RequiredArgsConstructor(access = PACKAGE)
-  static class Paging10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> implements
-      Paging<R> {
+  static class Paging10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> implements Paging<R> {
 
     @NonNull
     private final Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher;
-    @NonNull
-    private final Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args;
-    @NonNull
-    private final Pageable pageable;
+
+    @NonNull private final Tuple10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> args;
+    @NonNull private final Pageable pageable;
 
     @Override
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
-          new PageSpliterator<>(new PageFetcher10<>(fetcher, args), pageable),
-          false);
+          new PageSpliterator<>(new PageFetcher10<>(fetcher, args), pageable), false);
     }
   }
 }

@@ -23,9 +23,7 @@ package tw.com.softleader.data.stream.support;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.stream.LongStream;
@@ -44,19 +42,40 @@ class OfPaging10Test {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new OfPaging10<>(api::call)
-        .args(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable)
-        .stream()
-        .mapToLong(Long::longValue)
-        .sum();
+    var sum =
+        new OfPaging10<>(api::call)
+            .args(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable).stream()
+                .mapToLong(Long::longValue)
+                .sum();
 
-    Assertions.assertThat(sum).isEqualTo(
-        (long) ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 101);
+    Assertions.assertThat(sum)
+        .isEqualTo(
+            (long) ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
+                * 10
+                * 2
+                * 3
+                * 4
+                * 5
+                * 6
+                * 7
+                * 8
+                * 9
+                * 101);
 
     verify(api, times(1)).call(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES)).call(
-        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), eq(7), eq(8), eq(9), eq(101), any(Pageable.class));
+    verify(api, times(TOTAL_PAGES))
+        .call(
+            eq(10),
+            eq(2),
+            eq(3),
+            eq(4),
+            eq(5),
+            eq(6),
+            eq(7),
+            eq(8),
+            eq(9),
+            eq(101),
+            any(Pageable.class));
   }
 
   @Test
@@ -64,26 +83,46 @@ class OfPaging10Test {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10);
 
-    var sum = new OfPaging10<>(api::call)
-        .args(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable)
-        .stream()
-        .parallel()
-        .mapToLong(Long::longValue)
-        .sum();
+    var sum =
+        new OfPaging10<>(api::call)
+            .args(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable).parallelStream()
+                .mapToLong(Long::longValue)
+                .sum();
 
-    Assertions.assertThat(sum).isEqualTo(
-        (long) ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
-            * 10 * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 101);
+    Assertions.assertThat(sum)
+        .isEqualTo(
+            (long) ((1) + (1 + 2) + (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5))
+                * 10
+                * 2
+                * 3
+                * 4
+                * 5
+                * 6
+                * 7
+                * 8
+                * 9
+                * 101);
 
     verify(api, times(1)).call(10, 2, 3, 4, 5, 6, 7, 8, 9, 101, pageable); // 第一次的分頁應該只 fetch 一次
-    verify(api, times(TOTAL_PAGES)).call(
-        eq(10), eq(2), eq(3), eq(4), eq(5), eq(6), eq(7), eq(8), eq(9), eq(101), any(Pageable.class));
+    verify(api, times(TOTAL_PAGES))
+        .call(
+            eq(10),
+            eq(2),
+            eq(3),
+            eq(4),
+            eq(5),
+            eq(6),
+            eq(7),
+            eq(8),
+            eq(9),
+            eq(101),
+            any(Pageable.class));
   }
 
   static class Api {
 
-    Page<Long> call(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j,
-        Pageable pageable) {
+    Page<Long> call(
+        int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, Pageable pageable) {
       var pageAt = pageable.getPageNumber(); // start from 0
 
       if (pageAt >= TOTAL_PAGES) {
@@ -91,13 +130,13 @@ class OfPaging10Test {
       }
 
       // fake data
-      var data = LongStream.rangeClosed(0, pageAt + 1)
-          .boxed()
-          .map(l -> l * a * b * c * d * e * f * g * h * i * j)
-          .collect(toList());
+      var data =
+          LongStream.rangeClosed(0, pageAt + 1)
+              .boxed()
+              .map(l -> l * a * b * c * d * e * f * g * h * i * j)
+              .collect(toList());
 
       return new PageImpl<>(data, pageable, pageable.getPageSize() * (long) TOTAL_PAGES);
     }
   }
-
 }

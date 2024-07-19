@@ -24,41 +24,12 @@ import java.util.List;
 import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import org.jooq.lambda.function.Function1;
-import org.jooq.lambda.function.Function10;
-import org.jooq.lambda.function.Function11;
-import org.jooq.lambda.function.Function2;
-import org.jooq.lambda.function.Function3;
-import org.jooq.lambda.function.Function4;
-import org.jooq.lambda.function.Function5;
-import org.jooq.lambda.function.Function6;
-import org.jooq.lambda.function.Function7;
-import org.jooq.lambda.function.Function8;
-import org.jooq.lambda.function.Function9;
-import org.jooq.lambda.tuple.Tuple1;
-import org.jooq.lambda.tuple.Tuple10;
-import org.jooq.lambda.tuple.Tuple2;
-import org.jooq.lambda.tuple.Tuple3;
-import org.jooq.lambda.tuple.Tuple4;
-import org.jooq.lambda.tuple.Tuple5;
-import org.jooq.lambda.tuple.Tuple6;
-import org.jooq.lambda.tuple.Tuple7;
-import org.jooq.lambda.tuple.Tuple8;
-import org.jooq.lambda.tuple.Tuple9;
+import org.jooq.lambda.function.*;
+import org.jooq.lambda.tuple.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
-import tw.com.softleader.data.stream.support.OfPaging0;
-import tw.com.softleader.data.stream.support.OfPaging1;
-import tw.com.softleader.data.stream.support.OfPaging10;
-import tw.com.softleader.data.stream.support.OfPaging2;
-import tw.com.softleader.data.stream.support.OfPaging3;
-import tw.com.softleader.data.stream.support.OfPaging4;
-import tw.com.softleader.data.stream.support.OfPaging5;
-import tw.com.softleader.data.stream.support.OfPaging6;
-import tw.com.softleader.data.stream.support.OfPaging7;
-import tw.com.softleader.data.stream.support.OfPaging8;
-import tw.com.softleader.data.stream.support.OfPaging9;
+import tw.com.softleader.data.stream.support.*;
 
 /**
  * @author Matt Ho
@@ -68,13 +39,11 @@ public class PageSupport {
 
   // --- builder pattern
 
-  public <R> OfPaging0<R> of(
-      @NonNull Function1<Pageable, Page<R>> fetcher) {
+  public <R> OfPaging0<R> of(@NonNull Function1<Pageable, Page<R>> fetcher) {
     return new OfPaging0<>(fetcher);
   }
 
-  public <T1, R> OfPaging1<T1, R> of(
-      @NonNull Function2<T1, Pageable, Page<R>> fetcher) {
+  public <T1, R> OfPaging1<T1, R> of(@NonNull Function2<T1, Pageable, Page<R>> fetcher) {
     return new OfPaging1<>(fetcher);
   }
 
@@ -113,27 +82,27 @@ public class PageSupport {
     return new OfPaging8<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, R> OfPaging9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> of(
-      @NonNull Function10<T1, T2, T3, T4, T5, T6, T7, T8, T9, Pageable, Page<R>> fetcher) {
+  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, R>
+      OfPaging9<T1, T2, T3, T4, T5, T6, T7, T8, T9, R> of(
+          @NonNull Function10<T1, T2, T3, T4, T5, T6, T7, T8, T9, Pageable, Page<R>> fetcher) {
     return new OfPaging9<>(fetcher);
   }
 
-  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> OfPaging10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> of(
-      @NonNull Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher) {
+  public <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R>
+      OfPaging10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> of(
+          @NonNull Function11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, Pageable, Page<R>> fetcher) {
     return new OfPaging10<>(fetcher);
   }
 
   // --- 0 argument
 
   public <R> Stream<List<R>> pagedStream(
-      @NonNull Function1<Pageable, Page<R>> fetcher,
-      @NonNull Pageable pageable) {
+      @NonNull Function1<Pageable, Page<R>> fetcher, @NonNull Pageable pageable) {
     return of(fetcher).args(pageable).pagedStream();
   }
 
   public <R> Stream<R> stream(
-      @NonNull Function1<Pageable, Page<R>> fetcher,
-      @NonNull Pageable pageable) {
+      @NonNull Function1<Pageable, Page<R>> fetcher, @NonNull Pageable pageable) {
     return of(fetcher).args(pageable).stream();
   }
 
@@ -461,7 +430,8 @@ public class PageSupport {
       @Nullable T8 arg8,
       @Nullable T9 arg9,
       @NonNull Pageable pageable) {
-    return of(fetcher).args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, pageable)
+    return of(fetcher)
+        .args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, pageable)
         .pagedStream();
   }
 
@@ -477,7 +447,8 @@ public class PageSupport {
       @Nullable T8 arg8,
       @Nullable T9 arg9,
       @NonNull Pageable pageable) {
-    return of(fetcher).args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, pageable)
+    return of(fetcher)
+        .args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, pageable)
         .stream();
   }
 
@@ -510,7 +481,8 @@ public class PageSupport {
       @Nullable T9 arg9,
       @Nullable T10 arg10,
       @NonNull Pageable pageable) {
-    return of(fetcher).args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, pageable)
+    return of(fetcher)
+        .args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, pageable)
         .pagedStream();
   }
 
@@ -527,7 +499,8 @@ public class PageSupport {
       @Nullable T9 arg9,
       @Nullable T10 arg10,
       @NonNull Pageable pageable) {
-    return of(fetcher).args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, pageable)
+    return of(fetcher)
+        .args(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, pageable)
         .stream();
   }
 }

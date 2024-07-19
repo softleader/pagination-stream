@@ -9,7 +9,7 @@ help: ## Display this help.
 ##@ Develop
 
 format: ## Format the source code.
-	mvn process-sources -e
+	mvn validate
 
 clean: ## Remove files generated at build-time.
 	mvn clean -e
@@ -22,6 +22,10 @@ test: clean ## Clean and test the compiled code.
 
 install: clean ## Install project to local repository w/o unit testing.
 	mvn install -e -DskipTests -Prelease
+
+bump-deps: ## Bump dependencies to the latest version (excluding Spring & maven plugins).
+	mvn versions:update-properties -DexcludeProperties=spring-boot.version,spring-cloud.version,*plugin.version
+	mvn versions:commit
 
 ##@ Delivery
 

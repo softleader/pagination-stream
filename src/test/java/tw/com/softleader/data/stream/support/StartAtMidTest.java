@@ -22,9 +22,7 @@ package tw.com.softleader.data.stream.support;
 
 import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.stream.LongStream;
@@ -44,13 +42,9 @@ class StartAtMidTest {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10).withPage(STARTING_PAGE);
 
-    var sum = new OfPaging0<>(api::call).args(pageable)
-        .stream()
-        .mapToLong(Long::longValue)
-        .sum();
+    var sum = new OfPaging0<>(api::call).args(pageable).stream().mapToLong(Long::longValue).sum();
 
-    Assertions.assertThat(sum).isEqualTo(
-        (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
+    Assertions.assertThat(sum).isEqualTo((1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
 
     verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
     verify(api, times(TOTAL_PAGES - STARTING_PAGE)).call(any(Pageable.class));
@@ -61,14 +55,10 @@ class StartAtMidTest {
     var api = spy(Api.class);
     var pageable = Pageable.ofSize(10).withPage(STARTING_PAGE);
 
-    var sum = new OfPaging0<>(api::call).args(pageable)
-        .stream()
-        .parallel()
-        .mapToLong(Long::longValue)
-        .sum();
+    var sum =
+        new OfPaging0<>(api::call).args(pageable).parallelStream().mapToLong(Long::longValue).sum();
 
-    Assertions.assertThat(sum).isEqualTo(
-        (1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
+    Assertions.assertThat(sum).isEqualTo((1 + 2 + 3) + (1 + 2 + 3 + 4) + (1 + 2 + 3 + 4 + 5));
 
     verify(api, times(1)).call(pageable); // 第一次的分頁應該只 fetch 一次
     verify(api, times(TOTAL_PAGES - STARTING_PAGE)).call(any(Pageable.class));
@@ -84,9 +74,7 @@ class StartAtMidTest {
       }
 
       // fake data
-      var data = LongStream.rangeClosed(0, pageAt + 1)
-          .boxed()
-          .collect(toList());
+      var data = LongStream.rangeClosed(0, pageAt + 1).boxed().collect(toList());
 
       return new PageImpl<>(data, pageable, pageable.getPageSize() * (long) TOTAL_PAGES);
     }

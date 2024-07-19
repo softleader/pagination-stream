@@ -34,26 +34,22 @@ import org.springframework.data.domain.Pageable;
 /**
  * 這是一個用來處理資料分頁的 {@link Spliterator}，它幫助我們從資料庫或網路上取得大量的資料，然後分批處理，避免一次處理太多而導致記憶體不足。
  *
- * <p>
- * 在同步 (Sequential) 的情境中, 會依照分頁的順序來逐次的取得資料
+ * <p>在同步 (Sequential) 的情境中, 會依照分頁的順序來逐次的取得資料
  *
- * <p>
- * 在併行 (Parallel) 的情境中, 會先同步的取回第一次資料 (P1) 以作為拆分基礎, 假設 P1 取回的資料顯示共有 4 個分頁（P1, P2, P3, P4）, 之後的 3
+ * <p>在併行 (Parallel) 的情境中, 會先同步的取回第一次資料 (P1) 以作為拆分基礎, 假設 P1 取回的資料顯示共有 4 個分頁（P1, P2, P3, P4）, 之後的 3
  * 個分頁會被拆分成多個 Spliterator (S1, S2, S3）。每個拆分的 Spliterator 都會是一個子任務可以被獨立地執行。
  *
- * <pre>
- * <code>
- *  +-----+-----+-----+-----+
- *  |  P1 |  P2 |  P3 |  P4 |
- *  +-----+-----+-----+-----+
- *            |     |     |
- *            |     |     |
- *            v     v     v
- *         +-----+-----+-----+
- *         |  S1 |  S2 |  S3 |
- *         +-----+-----+-----+
- * </code>
- * </pre>
+ * <pre>{@code
+ * +-----+-----+-----+-----+
+ * |  P1 |  P2 |  P3 |  P4 |
+ * +-----+-----+-----+-----+
+ *           |     |     |
+ *           |     |     |
+ *           v     v     v
+ *        +-----+-----+-----+
+ *        |  S1 |  S2 |  S3 |
+ *        +-----+-----+-----+
+ * }</pre>
  *
  * @author Matt Ho
  */
@@ -103,8 +99,10 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
       pageable = pageable.next();
       return new FetchedPageSpliterator<>(page);
     }
-    var split = new SinglePageSpliterator<>(fetcher,
-        PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
+    var split =
+        new SinglePageSpliterator<>(
+            fetcher,
+            PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
     pageable = pageable.next();
     return split;
   }

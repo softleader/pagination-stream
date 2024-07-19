@@ -36,10 +36,8 @@ import tw.com.softleader.data.stream.PageFetcher;
 @RequiredArgsConstructor
 public class PageFetcher4<T1, T2, T3, T4, R> implements PageFetcher<R> {
 
-  @NonNull
-  private final Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher;
-  @NonNull
-  private final Tuple4<T1, T2, T3, T4> args;
+  @NonNull private final Function5<T1, T2, T3, T4, Pageable, Page<R>> fetcher;
+  @NonNull private final Tuple4<T1, T2, T3, T4> args;
 
   @Override
   public Page<R> fetch(@NonNull Pageable pageable) {
