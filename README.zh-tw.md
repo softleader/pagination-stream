@@ -1,6 +1,5 @@
-[![version](https://img.shields.io/github/v/release/softleader/pagination-stream?color=brightgreen&sort=semver)](https://github.com/softleader/pagination-stream/releases)
-
-[English](./README.md)
+[![](https://img.shields.io/badge/docs-English-blue?style=for-the-badge)](./README.md)
+[![version](https://img.shields.io/github/v/release/softleader/pagination-stream?style=for-the-badge&color=brightgreen&sort=semver)](https://github.com/softleader/pagination-stream/releases)
 
 # pagination-stream
 
