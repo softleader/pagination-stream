@@ -1,6 +1,15 @@
 # RELEASE defines the release-version fob the bundle.
 VERSION ?=
 
+# Functions
+define java_version
+$(if $(filter-out "",$(JAVA)),-D'java.version=$(JAVA)',)
+endef
+
+define spring_version
+$(if $(filter-out "",$(SPRING)),-D'spring-boot.version=$(SPRING)',)
+endef
+
 ##@ General
 
 help: ## Display this help.
@@ -18,7 +27,7 @@ compile: clean  ## Clean and compile the source code.
 	mvn compile -e
 
 test: clean ## Clean and test the compiled code.
-	mvn test -e
+	mvn test -e $(call java_version) $(call spring_version)
 
 install: clean ## Install project to local repository w/o unit testing.
 	mvn install -e -DskipTests -Prelease
