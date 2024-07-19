@@ -39,7 +39,7 @@ bump-deps: ## Bump dependencies to the latest version (excluding Spring).
 ##@ Delivery
 
 version: ## Get current project version
-	mvn help:evaluate -Dexpression=project.version
+	@mvn help:evaluate -Dexpression=project.version -DforceStdout -q
 
 new-version: ## Update version.
 ifeq ($(strip $(VERSION)),)
