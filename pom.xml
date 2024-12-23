@@ -50,16 +50,16 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
-    <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
+    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+    <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
     <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
-    <license-maven-plugin.version>4.3</license-maven-plugin.version>
+    <license-maven-plugin.version>4.6</license-maven-plugin.version>
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
-    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+    <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
 
-    <spring-boot.version>2.7.18</spring-boot.version>
+    <spring-boot.version>3.4.1</spring-boot.version>
     <skip.formatting>false</skip.formatting>
     <jool.version>0.9.15</jool.version>
   </properties>
