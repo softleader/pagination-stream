@@ -55,9 +55,11 @@
     <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
     <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
+    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+    <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
     <license-maven-plugin.version>4.6</license-maven-plugin.version>
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
-    <maven-gpg-plugin.version>3.0.13</maven-gpg-plugin.version>
+    <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
 
     <spring-boot.version>2.7.18</spring-boot.version>
     <skip.formatting>false</skip.formatting>
@@ -229,6 +231,41 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>${build-helper-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>regex-property</id>
+                <goals>
+                  <goal>regex-property</goal>
+                </goals>
+                <configuration>
+                  <name>java-module-name</name>
+                  <value>${project.artifactId}</value>
+                  <regex>-</regex>
+                  <replacement>.</replacement>
+                  <failIfNoMatch>false</failIfNoMatch>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>${maven-jar-plugin.version}</version>
+            <configuration>
+              <archive>
+                <manifest>
+                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                </manifest>
+                <manifestEntries>
+                  <Automatic-Module-Name>${java-module-name}</Automatic-Module-Name>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
             <version>${maven-source-plugin.version}</version>
@@ -236,12 +273,6 @@
               <attach>true</attach>
             </configuration>
             <executions>
-              <execution>
-                <id>package</id>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
               <execution>
                 <id>attach-sources</id>
                 <goals>
