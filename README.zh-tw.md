@@ -14,6 +14,13 @@ Pagination stream API
 
 > 你可以在 [Release Page](https://github.com/softleader/pagination-stream/releases/latest) 找到最新的版號
 
+Java Module:
+
+```java
+requires pagination.stream;
+requires spring.data.commons;
+```
+
 ## Usage
 
 首先定義要呼叫的 method, 必須符合:

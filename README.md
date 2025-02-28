@@ -16,6 +16,13 @@ Pagination stream API
 
 > You can find the latest version on the [Release Page](https://github.com/softleader/pagination-stream/releases/latest).
 
+Java Module:
+
+```java
+requires pagination.stream;
+requires spring.data.commons;
+```
+
 ## Usage
 
 First, define the method to be called. It must meet the following criteria:
