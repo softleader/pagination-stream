@@ -4,7 +4,7 @@
 
   <groupId>tw.com.softleader.data</groupId>
   <artifactId>pagination-stream</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 
   <name>pagination-stream</name>
   <description>Pagination stream API for Spring Data</description>
