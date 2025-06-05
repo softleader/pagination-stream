@@ -109,7 +109,7 @@ spec:
     stage('Unit Testing (Spring 3, Java 17)') {
       steps {
         container('maven-java17') {
-          sh "make test JAVA=17 SPRING=3.4.1"
+          sh "make test JAVA=17 SPRING=3.5.0"
         }
       }
       post {
