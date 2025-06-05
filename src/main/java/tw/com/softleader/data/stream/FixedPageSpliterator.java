@@ -27,11 +27,11 @@ import lombok.NonNull;
 import org.springframework.data.domain.Pageable;
 
 /**
- * 這是一個使用固定 {@link Pageable} 的 {@link Spliterator}, 不斷地重複直到查不到任何資料為止
+ * 這是一個使用固定 {@link Pageable} 的 {@link PageSpliterator}, 不斷的重複直到查不到任何資料為止
  *
  * <p>預期在使用上, 每次資料查到後, 對資料來源改變資料狀態, 因此每一圈所查回符合條件的資料數也預期逐漸減少, 當符合條件的資料數量變為零或達到最大嘗試次數時就會停止
  *
- * <p>為了避免無窮循環, 本 {@link Spliterator} 支援設定最大重試次數來限制資料的取回次數, 若超過最大重試次數, 則會拋出 {@link
+ * <p>為了避免無窮循環, 本 {@code Spliterator} 支援設定最大重試次數來限制資料的取回次數, 若超過最大重試次數, 則會拋出 {@link
  * AttemptExhaustedException}
  *
  * <pre>{@code
@@ -40,7 +40,7 @@ import org.springframework.data.domain.Pageable;
  * +-----+-----+-----+-----+
  * }</pre>
  *
- * <p>本 {@link Spliterator} 不支援 Parallel 處理
+ * <p>本 {@code Spliterator} 不支援 Parallel 處理
  *
  * @author Matt Ho
  */
