@@ -56,6 +56,30 @@ PageSupport
   })
 ```
 
+The `fixedStream` or `fixedPagedStream` methods are intended for scenarios using a fixed `Pageable` as the paging condition. Each iteration fetches the currently available matching data from the source and processes it, repeating this process until no more matching data is found. 
+
+```
+ +-----+-----+-----+-----+
+ |  P1 |  P1 |  P1 |  .. | (no more data) => End
+ +-----+-----+-----+-----+
+```
+
+Example:
+
+```java
+var maxAttempts = 100; // Maximum number of attempts, as a safeguard against infinite loops
+PageSupport
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), maxAttempts)
+  .forEach(data -> { // data will be MyData
+    // Each iteration queries using the originally provided Pageable
+    // It is expected that each round of processing modifies the data source state
+    // Thus, the amount of matching data should gradually decrease
+    // It stops when no matching data remains or the max attempt limit is reached
+  });
+```
+
+> If the maximum number of attempts is reached, an `AttemptExhaustedException` will be thrown. It’s recommended to catch this exception and handle it accordingly.
+
 ### Builder Pattern
 
 `PageSupport` also provides a builder pattern. You can start building with `PageSupport#of`:
@@ -112,6 +136,8 @@ In summary, the key points of parallel processing are:
 1. The first page is fetched sequentially to serve as the basis for splitting spliterators (subtasks).
 2. The minimum unit of processing for a subtask is each page.
 3. Each subtask may not necessarily run on an independent thread, but will be handled by Java's [parallelism mechanisms](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html).
+
+> APIs starting with `fixed*` do not support parallel processing.
 
 #### Performance Impact
 

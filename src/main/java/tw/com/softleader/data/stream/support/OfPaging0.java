@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.lambda.function.Function1;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import tw.com.softleader.data.stream.FixedPageSpliterator;
 import tw.com.softleader.data.stream.PageSpliterator;
 import tw.com.softleader.data.stream.Paging;
 
@@ -57,6 +58,12 @@ public class OfPaging0<R> {
     public Stream<List<R>> pagedStream() {
       return StreamSupport.stream(
           new PageSpliterator<>(new PageFetcher0<>(fetcher), pageable), false);
+    }
+
+    @Override
+    public Stream<List<R>> fixedPagedStream(long maxAttempts) {
+      return StreamSupport.stream(
+          new FixedPageSpliterator<>(new PageFetcher0<>(fetcher), pageable, maxAttempts), false);
     }
   }
 }

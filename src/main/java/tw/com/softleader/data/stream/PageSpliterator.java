@@ -77,10 +77,10 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
       return false;
     }
     action.accept(page.getContent());
-    if (isLastPage()) {
+    if (isLastPage(pageable)) {
       return false;
     }
-    pageable = page.getPageable().next();
+    pageable = fetchNextPage(page.getPageable());
     fetched.set(false);
     return true;
   }
@@ -91,36 +91,40 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     if (isPageEmpty() || onlyOnePage()) {
       return null;
     }
-    if (isLastPage()) { // 排到最後一頁就不切分了
+    if (isLastPage(pageable)) { // 排到最後一頁就不切分了
       fetched.set(false); // 但還是要讓後續的 tryAdvance 去取資料
       return null;
     }
-    if (isFirstPage()) {
-      pageable = pageable.next();
+    if (isFirstPage(pageable)) {
+      pageable = fetchNextPage(pageable);
       return new FetchedPageSpliterator<>(page);
     }
     var split =
         new SinglePageSpliterator<>(
             fetcher,
             PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
-    pageable = pageable.next();
+    pageable = fetchNextPage(pageable);
     return split;
   }
 
   private boolean onlyOnePage() {
-    return isFirstPage() && isLastPage();
+    return isFirstPage(pageable) && isLastPage(pageable);
   }
 
   private boolean isPageEmpty() {
     return page == null || page.isEmpty();
   }
 
-  private boolean isLastPage() {
+  protected boolean isLastPage(@NonNull Pageable pageable) {
     return totalPages != null && pageable.getPageNumber() + 1 >= totalPages;
   }
 
-  private boolean isFirstPage() {
+  protected boolean isFirstPage(@NonNull Pageable pageable) {
     return pageable.getPageNumber() == firstPageNumber;
+  }
+
+  protected Pageable fetchNextPage(@NonNull Pageable pageable) {
+    return pageable.next();
   }
 
   @Override

@@ -54,6 +54,29 @@ PageSupport
   })
 ```
 
+`fixedStream` 或 `fixedPagedStream` 提供給使用固定的 `Pageable` 作為分頁條件的情境, 每次都從資料源撈取「當下還符合條件的資料」來處理, 重複這個過程直到查不到任何資料為止
+
+```
+ +-----+-----+-----+-----+
+ |  P1 |  P1 |  P1 |  .. | (no more data) => End
+ +-----+-----+-----+-----+
+```
+
+範例如下:
+
+```java
+var maxAttempts = 100; // 最多嘗試幾次, 作為避免無限迴圈的保險
+PageSupport
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), maxAttempts)
+  .forEach(data -> { // data will be MyData
+    // 每一圈都會是使用最初傳入的 Pageable 所查詢的結果
+    // 預期在使用上, 每一圈的邏輯都會對資料來源改變資料狀態, 因此每一圈所查回符合條件的資料數也預期逐漸減少
+    // 當符合條件的資料數量變為零或達到最大嘗試次數時就會停止
+  })
+```
+
+> 若達到最大嘗試次數時會拋出 `AttemptExhaustedException`, 建議可 catch 例外做後續處理
+
 ### Builder Pattern
 
 `PageSupport` 也有提供 Builder 模式的建構方式, 你可以透過 `PageSupport#of` 開始一個 Builder 的建構:
@@ -110,6 +133,8 @@ PageSupport
 1. 會先同步 (Sequential) 的取回第一次分頁資訊, 以作為拆分 Spliterator (子任務) 的基礎
 2. 子任務處理的最小單位是每一個分頁 (Page)
 3. 每個子任務不一定是獨立的 Thread 去執行, 這部分回歸 Java 的 [Parallelism 機制](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)去處理
+
+> `fixed*` 開頭的 API 不支援 Parallel 處理
 
 #### Performance Impact
 
