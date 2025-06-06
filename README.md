@@ -56,7 +56,7 @@ PageSupport
   })
 ```
 
-During execution, the method uses the pagination information from each result to retrieve the next page by calling `Pageable#next()`, continuing until the last page (*Pn*):
+During execution, the method uses the pagination information from each result to retrieve the next page by calling [`Pageable#next()`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html#next()), continuing until the last page (*Pn*):
 
 ```
  +-----+-----+-----+-----+
