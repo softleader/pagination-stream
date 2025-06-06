@@ -80,10 +80,10 @@ Example:
 PageSupport
   .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10))
   .forEach(data -> { // data will be of type MyData
-  // Each iteration uses the originally provided Pageable to query data
-  // It is expected that the processing logic will change the state of the data source
-  // So the number of matching records will gradually decrease
-  // The stream ends when no data is returned or when the attempt limit is reached
+    // Each iteration uses the originally provided Pageable to query data
+    // It is expected that the processing logic will change the state of the data source
+    // So the number of matching records will gradually decrease
+    // The stream ends when no data is returned or when the attempt limit is reached
   });
 ```
 
