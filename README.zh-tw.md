@@ -75,17 +75,45 @@ PageSupport
 範例如下:
 
 ```java
-var maxAttempts = 100; // 最多嘗試幾次, 作為避免無限迴圈的保險
 PageSupport
-  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), maxAttempts)
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10))
   .forEach(data -> { // data will be MyData
-    // 每一圈都會是使用最初傳入的 Pageable 所查詢的結果
-    // 預期在使用上, 每一圈的邏輯都會對資料來源改變資料狀態, 因此每一圈所查回符合條件的資料數也預期逐漸減少
-    // 當符合條件的資料數量變為零或達到最大嘗試次數時就會停止
+  // 每一圈都會是使用最初傳入的 Pageable 所查詢的結果
+  // 預期在使用上, 每一圈的邏輯都會對資料來源改變資料狀態, 因此每一圈所查回符合條件的資料數也預期逐漸減少
+  // 當符合條件的資料數量變為零或違反嘗試策略時就會停止
   })
 ```
 
-> 若達到最大嘗試次數時會拋出 `AttemptExhaustedException`, 建議可 catch 例外做後續處理
+為避免無限循環, 預設會使用「第一頁的總頁數 × 3」作為最大嘗試次數, 若超過最大次數仍無法結束, 系統會拋出 `AttemptExhaustedException`, 建議可 try..catch 例外做後續處理
+
+在 `AttemptPolicyFactory` 內也提供多種常用策略可供使用, 例如:
+
+```java
+PageSupport
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), AttemptPolicyFactory.maxAttempts(100))
+  ...
+```
+
+你也可以透過實作 `AttemptPolicyFactory` 來指定自訂的嘗試策略, 例如:
+
+```java
+class MyAttemptPolicyFactory implements AttemptPolicyFactory {
+
+  @Override
+  public AttemptPolicy create(Page<?> firstPage) {
+    return new AttemptPolicy() {
+      @Override
+      public boolean canProceed(long currentAttempt) {
+        return ...; // 實作自訂邏輯
+      }
+    };
+  }
+}
+
+PageSupport
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), new MyAttemptPolicyFactory())
+  ...
+```
 
 ### Builder Pattern
 

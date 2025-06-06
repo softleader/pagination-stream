@@ -20,12 +20,13 @@
  */
 package tw.com.softleader.data.stream;
 
-import static tw.com.softleader.data.stream.FixedPageSpliterator.UNLIMITED_MAX_ATTEMPTS;
+import static tw.com.softleader.data.stream.AttemptPolicyFactory.totalPage;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 
 /**
  * 分頁介面
@@ -39,6 +40,7 @@ public interface Paging<R> {
    *
    * @see #parallelPagedStream()
    */
+  @NonNull
   Stream<List<R>> pagedStream();
 
   /**
@@ -47,6 +49,7 @@ public interface Paging<R> {
    *
    * @see #parallelStream()
    */
+  @NonNull
   default Stream<R> stream() {
     return pagedStream().flatMap(Collection::stream);
   }
@@ -57,6 +60,7 @@ public interface Paging<R> {
    *
    * @see #stream()
    */
+  @NonNull
   default Stream<R> parallelStream() {
     return stream().parallel();
   }
@@ -66,6 +70,7 @@ public interface Paging<R> {
    *
    * @see #pagedStream()
    */
+  @NonNull
   default Stream<List<R>> parallelPagedStream() {
     return pagedStream().parallel();
   }
@@ -79,8 +84,9 @@ public interface Paging<R> {
    *
    * @see FixedPageSpliterator
    */
+  @NonNull
   default Stream<List<R>> fixedPagedStream() {
-    return fixedPagedStream(UNLIMITED_MAX_ATTEMPTS);
+    return fixedPagedStream(totalPage());
   }
 
   /**
@@ -93,6 +99,7 @@ public interface Paging<R> {
    *
    * @see FixedPageSpliterator
    */
+  @NonNull
   default Stream<R> fixedStream() {
     return fixedPagedStream().flatMap(Collection::stream);
   }
@@ -104,11 +111,13 @@ public interface Paging<R> {
    *
    * <p>此模式不支援 Parallel 處理
    *
-   * @param maxAttempts 最多嘗試幾次, 作為避免無限迴圈的保險; {@code <=0} 代表不需限制
+   * @param attemptPolicyFactory 最多嘗試幾次的邏輯, 作為避免無限迴圈的保險
    * @throws AttemptExhaustedException if reached max attempts
    * @see FixedPageSpliterator
    */
-  Stream<List<R>> fixedPagedStream(long maxAttempts) throws AttemptExhaustedException;
+  @NonNull
+  Stream<List<R>> fixedPagedStream(@NonNull AttemptPolicyFactory attemptPolicyFactory)
+      throws AttemptExhaustedException;
 
   /**
    * Creates a new sequential {@link Stream} from {@link FixedPageSpliterator} of the results of
@@ -118,11 +127,13 @@ public interface Paging<R> {
    *
    * <p>此模式不支援 Parallel 處理
    *
-   * @param maxAttempts 最多嘗試幾次, 作為避免無限迴圈的保險; 若 {@code <=0} 代表不需限制
+   * @param attemptPolicyFactory 最多嘗試幾次的邏輯, 作為避免無限迴圈的保險
    * @throws AttemptExhaustedException if reached max attempts
    * @see FixedPageSpliterator
    */
-  default Stream<R> fixedStream(long maxAttempts) throws AttemptExhaustedException {
-    return fixedPagedStream(maxAttempts).flatMap(Collection::stream);
+  @NonNull
+  default Stream<R> fixedStream(@NonNull AttemptPolicyFactory attemptPolicyFactory)
+      throws AttemptExhaustedException {
+    return fixedPagedStream(attemptPolicyFactory).flatMap(Collection::stream);
   }
 }

@@ -32,6 +32,7 @@ import org.jooq.lambda.tuple.Tuple3;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
+import tw.com.softleader.data.stream.AttemptPolicyFactory;
 import tw.com.softleader.data.stream.FixedPageSpliterator;
 import tw.com.softleader.data.stream.PageSpliterator;
 import tw.com.softleader.data.stream.Paging;
@@ -69,9 +70,10 @@ public class OfPaging3<T1, T2, T3, R> {
     }
 
     @Override
-    public Stream<List<R>> fixedPagedStream(long maxAttempts) {
+    public Stream<List<R>> fixedPagedStream(@NonNull AttemptPolicyFactory attemptPolicyFactory) {
       return StreamSupport.stream(
-          new FixedPageSpliterator<>(new PageFetcher3<>(fetcher, args), pageable, maxAttempts),
+          new FixedPageSpliterator<>(
+              new PageFetcher3<>(fetcher, args), pageable, attemptPolicyFactory),
           false);
     }
   }

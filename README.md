@@ -77,18 +77,45 @@ The `fixedStream` or `fixedPagedStream` methods are intended for scenarios using
 Example:
 
 ```java
-var maxAttempts = 100; // Maximum number of attempts, as a safeguard against infinite loops
 PageSupport
-  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), maxAttempts)
-  .forEach(data -> { // data will be MyData
-    // Each iteration queries using the originally provided Pageable
-    // It is expected that each round of processing modifies the data source state
-    // Thus, the amount of matching data should gradually decrease
-    // It stops when no matching data remains or the max attempt limit is reached
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10))
+  .forEach(data -> { // data will be of type MyData
+  // Each iteration uses the originally provided Pageable to query data
+  // It is expected that the processing logic will change the state of the data source
+  // So the number of matching records will gradually decrease
+  // The stream ends when no data is returned or when the retry limit is reached
   });
 ```
 
-> If the maximum number of attempts is reached, an `AttemptExhaustedException` will be thrown. It’s recommended to catch this exception and handle it accordingly.
+To prevent infinite loops, a retry strategy is used. By default, the maximum number of attempts is calculated as total pages in the first page × 3.
+If this limit is exceeded, an AttemptExhaustedException will be thrown.
+It is recommended to catch the exception for follow-up handling.
+
+`AttemptPolicyFactory` provides several common built-in strategies, such as:
+
+```java
+PageSupport
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), AttemptPolicyFactory.maxAttempts(100))
+  ...
+```
+
+You can implement your own `AttemptPolicyFactory` to define a custom retry logic, for example:
+
+```java
+class MyAttemptPolicyFactory implements AttemptPolicyFactory {
+  @Override
+  public AttemptPolicy create(Page<?> firstPage) {
+    return currentAttempt -> {
+      // Custom retry logic
+      return ...;
+    };
+  }
+}
+
+PageSupport
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), new MyAttemptPolicyFactory())
+  ...
+```
 
 ### Builder Pattern
 

@@ -66,7 +66,7 @@ import org.springframework.data.domain.Pageable;
  */
 public class PageSpliterator<T> implements Spliterator<List<T>> {
 
-  private static final long TOO_EXPENSIVE_TO_COMPUTE = Long.MAX_VALUE;
+  protected static final long TOO_EXPENSIVE_TO_COMPUTE_ESTIMATE_SIZE = Long.MAX_VALUE;
 
   private final PageFetcher<T> fetcher;
   private final int firstPageNumber; // 從 0 開始
@@ -91,7 +91,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     if (isLastPage(pageable)) {
       return false;
     }
-    pageable = fetchNextPage(page.getPageable());
+    pageable = nextPage(page.getPageable());
     fetched.set(false);
     return true;
   }
@@ -107,14 +107,14 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
       return null;
     }
     if (isFirstPage(pageable)) {
-      pageable = fetchNextPage(pageable);
+      pageable = nextPage(pageable);
       return new FetchedPageSpliterator<>(page);
     }
     var split =
         new SinglePageSpliterator<>(
             fetcher,
             PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
-    pageable = fetchNextPage(pageable);
+    pageable = nextPage(pageable);
     return split;
   }
 
@@ -134,14 +134,16 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     return pageable.getPageNumber() == firstPageNumber;
   }
 
-  protected Pageable fetchNextPage(@NonNull Pageable pageable) {
+  protected Pageable nextPage(@NonNull Pageable pageable) {
     return pageable.next();
   }
 
   @Override
   public long estimateSize() {
     prefetch();
-    return ofNullable(totalPages).map(Integer::longValue).orElse(TOO_EXPENSIVE_TO_COMPUTE);
+    return ofNullable(totalPages)
+        .map(Integer::longValue)
+        .orElse(TOO_EXPENSIVE_TO_COMPUTE_ESTIMATE_SIZE);
   }
 
   @Override
@@ -153,11 +155,15 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     if (fetched.get()) {
       return;
     }
-    page = fetcher.fetch(pageable);
+    page = fetchPage();
     if (page != null) {
       pageable = page.getPageable();
       totalPages = page.getTotalPages();
     }
     fetched.set(true);
+  }
+
+  protected Page<T> fetchPage() {
+    return fetcher.fetch(pageable);
   }
 }

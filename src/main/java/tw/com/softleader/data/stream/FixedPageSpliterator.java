@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.concurrent.atomic.AtomicLong;
 import lombok.NonNull;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -31,7 +32,7 @@ import org.springframework.data.domain.Pageable;
  *
  * <p>預期在使用上, 每次資料查到後, 對資料來源改變資料狀態, 因此每一圈所查回符合條件的資料數也預期逐漸減少, 當符合條件的資料數量變為零或達到最大嘗試次數時就會停止
  *
- * <p>為了避免無窮循環, 本 {@code Spliterator} 支援設定最大重試次數來限制資料的取回次數, 若超過最大重試次數, 則會拋出 {@link
+ * <p>為了避免無限循環, 本 {@code Spliterator} 支援設定最大重試次數來限制資料的取回次數, 若超過最大重試次數, 則會拋出 {@link
  * AttemptExhaustedException}
  *
  * <pre>{@code
@@ -46,20 +47,17 @@ import org.springframework.data.domain.Pageable;
  */
 public class FixedPageSpliterator<T> extends PageSpliterator<T> {
 
-  /** 不限制最大嘗試次數 */
-  public static final long UNLIMITED_MAX_ATTEMPTS = 0;
-
+  private final Object lock = new Object();
   private final AtomicLong count = new AtomicLong(0);
-  private final long maxAttempts;
+  private final AttemptPolicyFactory policyFactory;
+  private volatile AttemptPolicy policy;
 
   public FixedPageSpliterator(
-      @NonNull PageFetcher<T> fetcher, @NonNull Pageable pageable, long maxAttempts) {
+      @NonNull PageFetcher<T> fetcher,
+      @NonNull Pageable pageable,
+      @NonNull AttemptPolicyFactory policyFactory) {
     super(fetcher, pageable);
-    this.maxAttempts = maxAttempts;
-  }
-
-  public FixedPageSpliterator(@NonNull PageFetcher<T> fetcher, @NonNull Pageable pageable) {
-    this(fetcher, pageable, UNLIMITED_MAX_ATTEMPTS);
+    this.policyFactory = policyFactory;
   }
 
   @Override
@@ -68,9 +66,22 @@ public class FixedPageSpliterator<T> extends PageSpliterator<T> {
   }
 
   @Override
-  protected Pageable fetchNextPage(@NonNull Pageable pageable) {
+  protected Page<T> fetchPage() {
+    var page = super.fetchPage();
+    if (policy == null) {
+      synchronized (lock) {
+        if (policy == null) {
+          policy = policyFactory.create(page);
+        }
+      }
+    }
+    return page;
+  }
+
+  @Override
+  protected Pageable nextPage(@NonNull Pageable pageable) {
     var attempts = this.count.incrementAndGet();
-    if (maxAttempts > UNLIMITED_MAX_ATTEMPTS && attempts >= maxAttempts) {
+    if (policy != null && !policy.canProceed(attempts)) {
       throw new AttemptExhaustedException(
           String.format("Attempt exhausted after %s attempts", attempts));
     }
@@ -85,5 +96,10 @@ public class FixedPageSpliterator<T> extends PageSpliterator<T> {
   @Override
   public int characteristics() {
     return ORDERED | IMMUTABLE;
+  }
+
+  @Override
+  public long estimateSize() {
+    return TOO_EXPENSIVE_TO_COMPUTE_ESTIMATE_SIZE;
   }
 }
