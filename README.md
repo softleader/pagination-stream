@@ -83,11 +83,11 @@ PageSupport
   // Each iteration uses the originally provided Pageable to query data
   // It is expected that the processing logic will change the state of the data source
   // So the number of matching records will gradually decrease
-  // The stream ends when no data is returned or when the retry limit is reached
+  // The stream ends when no data is returned or when the attempt limit is reached
   });
 ```
 
-To prevent infinite loops, a retry strategy is used. By default, the maximum number of attempts is calculated as total pages in the first page × 3.
+To prevent infinite loops, a attempt strategy is used. By default, the maximum number of attempts is calculated as total pages in the first page × 3.
 If this limit is exceeded, an AttemptExhaustedException will be thrown.
 It is recommended to catch the exception for follow-up handling.
 
@@ -101,14 +101,14 @@ PageSupport
   ...
 ```
 
-You can implement your own `AttemptPolicyFactory` to define a custom retry logic, for example:
+You can implement your own `AttemptPolicyFactory` to define a custom logic, for example:
 
 ```java
 class MyAttemptPolicyFactory implements AttemptPolicyFactory {
   @Override
-  public AttemptPolicy create(Page<?> firstPage) {
+  public AttemptPolicy create(@NonNull Page<?> firstPage) {
     return currentAttempt -> {
-      // Custom retry logic
+      // Custom logic
       return ...;
     };
   }

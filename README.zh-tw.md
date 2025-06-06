@@ -102,7 +102,7 @@ PageSupport
 class MyAttemptPolicyFactory implements AttemptPolicyFactory {
 
   @Override
-  public AttemptPolicy create(Page<?> firstPage) {
+  public AttemptPolicy create(@NonNull Page<?> firstPage) {
     return new AttemptPolicy() {
       @Override
       public boolean canProceed(long currentAttempt) {
