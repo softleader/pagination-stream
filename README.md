@@ -94,10 +94,11 @@ It is recommended to catch the exception for follow-up handling.
 `AttemptPolicyFactory` provides several common built-in strategies, such as:
 
 ```java
+// It is recommended to use import static to improve code readability
+import static tw.com.softleader.data.stream.AttemptPolicyFactory.*;
+
 PageSupport
-  .fixedStream(null, 1, 2L, "3", Pageable.ofSize(10),
-    // Specify the maximum number of attempts directly
-    AttemptPolicyFactory.maxAttempts(100));
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), maxAttempts(100)); // Directly specify the maximum number of attempts
   ...
 ```
 
