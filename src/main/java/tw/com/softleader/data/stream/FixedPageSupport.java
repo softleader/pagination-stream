@@ -36,7 +36,7 @@ import org.springframework.lang.Nullable;
  * @author Matt Ho
  */
 @NoArgsConstructor(access = PACKAGE)
-public class FixedPageSupport extends PageBuilderSupport {
+public class FixedPageSupport extends OfPagingSupport {
 
   // --- 0 argument
 

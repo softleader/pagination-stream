@@ -30,7 +30,7 @@ import org.springframework.data.domain.Pageable;
 import tw.com.softleader.data.stream.support.*;
 
 @NoArgsConstructor(access = PACKAGE)
-public class PageBuilderSupport {
+public class OfPagingSupport {
 
   public static <R> OfPaging0<R> of(@NonNull Function1<Pageable, Page<R>> fetcher) {
     return new OfPaging0<>(fetcher);
