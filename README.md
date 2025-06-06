@@ -95,7 +95,9 @@ It is recommended to catch the exception for follow-up handling.
 
 ```java
 PageSupport
-  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), AttemptPolicyFactory.maxAttempts(100))
+  .fixedStream(null, 1, 2L, "3", Pageable.ofSize(10),
+    // Specify the maximum number of attempts directly
+    AttemptPolicyFactory.maxAttempts(100));
   ...
 ```
 

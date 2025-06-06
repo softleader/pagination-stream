@@ -90,7 +90,9 @@ PageSupport
 
 ```java
 PageSupport
-  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), AttemptPolicyFactory.maxAttempts(100))
+  .fixedStream(null, 1, 2L, "3", Pageable.ofSize(10),
+    // 直接指定最大嘗試次數
+    AttemptPolicyFactory.maxAttempts(100));
   ...
 ```
 

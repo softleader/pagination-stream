@@ -25,19 +25,6 @@ import static org.springframework.util.Assert.isTrue;
 import org.springframework.data.domain.Page;
 import org.springframework.lang.NonNull;
 
-class MyAttemptPolicyFactory implements AttemptPolicyFactory {
-
-  @Override
-  public AttemptPolicy create(Page<?> firstPage) {
-    return new AttemptPolicy() {
-      @Override
-      public boolean canProceed(long currentAttempt) {
-        return false; // 實作客製化邏輯
-      }
-    };
-  }
-}
-
 /**
  * {@link AttemptPolicy} 工廠
  *
