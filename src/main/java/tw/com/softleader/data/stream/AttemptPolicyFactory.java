@@ -41,8 +41,13 @@ public interface AttemptPolicyFactory {
     return firstPage -> currentAttempt -> true;
   }
 
-  /** 指定最大嘗試次數 */
+  /**
+   * 指定最大嘗試次數
+   *
+   * @throws IllegalArgumentException if maxAttempts <= 0
+   */
   static AttemptPolicyFactory maxAttempts(long maxAttempts) {
+    isTrue(maxAttempts > 0, "maxAttempts must > 0");
     return firstPage -> currentAttempt -> currentAttempt < maxAttempts;
   }
 
