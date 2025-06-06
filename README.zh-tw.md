@@ -44,7 +44,7 @@ PageSupport
   })
 ```
 
-如果你不是很在意有多少頁, 只想 Streaming 的處理每頁中的資料, 你可以使用 `PageSupport#stream` 建立 `Stream<T>`, 範例如下:
+如果你不是很在意有多少頁, 只想 Streaming 的處理每頁中的資料, 你可以使用 [`PageSupport#stream`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html#next()) 建立 `Stream<T>`, 範例如下:
 
 ```java    
 PageSupport
