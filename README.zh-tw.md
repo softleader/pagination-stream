@@ -89,10 +89,11 @@ PageSupport
 在 `AttemptPolicyFactory` 內也提供多種常用策略可供使用, 例如:
 
 ```java
+// 建議使用 import static 來提升程式碼閱讀體驗
+import static tw.com.softleader.data.stream.AttemptPolicyFactory.*;
+
 PageSupport
-  .fixedStream(null, 1, 2L, "3", Pageable.ofSize(10),
-    // 直接指定最大嘗試次數
-    AttemptPolicyFactory.maxAttempts(100));
+  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), maxAttempts(100)); // 直接指定最大嘗試次數
   ...
 ```
 
