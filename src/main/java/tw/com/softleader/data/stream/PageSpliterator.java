@@ -30,6 +30,7 @@ import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 
 /**
  * 這是一個用來處理資料分頁的 {@link Spliterator}，它幫助我們從資料庫或網路上取得大量的資料，然後分批處理，避免一次處理太多而導致記憶體不足。
@@ -163,6 +164,7 @@ public class PageSpliterator<T> implements Spliterator<List<T>> {
     fetched.set(true);
   }
 
+  @Nullable
   protected Page<T> fetchPage() {
     return fetcher.fetch(pageable);
   }
