@@ -44,7 +44,7 @@ PageSupport
   })
 ```
 
-如果你不是很在意有多少頁, 只想 Streaming 的處理每頁中的資料, 你可以使用 [`PageSupport#stream`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html#next()) 建立 `Stream<T>`, 範例如下:
+如果你不是很在意有多少頁, 只想 Streaming 的處理每頁中的資料, 你可以使用 `PageSupport#stream` 建立 `Stream<T>`, 範例如下:
 
 ```java    
 PageSupport
@@ -54,7 +54,7 @@ PageSupport
   })
 ```
 
-執行時, 會根據每次取得的分頁資訊, 透過 `Pageable#next()` 順序逐頁取得資料, 直到最後一頁 (*Pn*):
+執行時, 會根據每次取得的分頁資訊, 透過 [`Pageable#next()`](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/domain/Pageable.html#next()) 順序逐頁取得資料, 直到最後一頁 (*Pn*):
 
 ```
 +-----+-----+-----+-----+-----+
