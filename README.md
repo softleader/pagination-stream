@@ -88,7 +88,7 @@ PageSupport
 ```
 
 To prevent infinite loops, a attempt strategy is used. By default, the maximum number of attempts is calculated as total pages in the first page × 3.
-If this limit is exceeded, an AttemptExhaustedException will be thrown.
+If this limit is exceeded, an `AttemptExhaustedException` will be thrown.
 It is recommended to catch the exception for follow-up handling.
 
 `AttemptPolicyFactory` provides several common built-in strategies, such as:
