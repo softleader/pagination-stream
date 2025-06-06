@@ -49,15 +49,15 @@ public class FixedPageSpliterator<T> extends PageSpliterator<T> {
 
   private final Object lock = new Object();
   private final AtomicLong count = new AtomicLong(0);
-  private final AttemptPolicyFactory policyFactory;
-  private volatile AttemptPolicy policy;
+  private final AttemptPolicyFactory attemptPolicyFactory;
+  private volatile AttemptPolicy attemptPolicy;
 
   public FixedPageSpliterator(
       @NonNull PageFetcher<T> fetcher,
       @NonNull Pageable pageable,
       @NonNull AttemptPolicyFactory policyFactory) {
     super(fetcher, pageable);
-    this.policyFactory = policyFactory;
+    this.attemptPolicyFactory = policyFactory;
   }
 
   @Override
@@ -68,20 +68,26 @@ public class FixedPageSpliterator<T> extends PageSpliterator<T> {
   @Override
   protected Page<T> fetchPage() {
     var page = super.fetchPage();
-    if (policy == null) {
+    if (page != null) {
+      ensureAttemptPolicyCreated(page);
+    }
+    return page;
+  }
+
+  private void ensureAttemptPolicyCreated(@NonNull Page<T> page) {
+    if (attemptPolicy == null) {
       synchronized (lock) {
-        if (policy == null) {
-          policy = policyFactory.create(page);
+        if (attemptPolicy == null) {
+          attemptPolicy = attemptPolicyFactory.create(page);
         }
       }
     }
-    return page;
   }
 
   @Override
   protected Pageable nextPage(@NonNull Pageable pageable) {
     var attempts = this.count.incrementAndGet();
-    if (policy != null && !policy.canProceed(attempts)) {
+    if (attemptPolicy != null && !attemptPolicy.canProceed(attempts)) {
       throw new AttemptExhaustedException(
           String.format("Attempt exhausted after %s attempts", attempts));
     }
