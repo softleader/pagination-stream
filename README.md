@@ -46,7 +46,7 @@ PageSupport
   })
 ```
 
-If you don't care about the number of pages and just want to stream the data from each page, you can create a `Stream<T>` using `PageSupport#stream`. For example:
+If you’re not concerned about page boundaries and simply want to process all data elements, use `PageSupport#stream` to create a `Stream<T>`:
 
 ```java    
 PageSupport
@@ -55,6 +55,16 @@ PageSupport
     // do something to every single data
   })
 ```
+
+During execution, the method uses the pagination information from each result to retrieve the next page by calling `Pageable#next()`, continuing until the last page (*Pn*):
+
+```
+ +-----+-----+-----+-----+
+ |  P1 |  P1 |  P1 |  .. |  → no more data => End
+ +-----+-----+-----+-----+
+```
+
+### Fixed Pageable
 
 The `fixedStream` or `fixedPagedStream` methods are intended for scenarios using a fixed `Pageable` as the paging condition. Each iteration fetches the currently available matching data from the source and processes it, repeating this process until no more matching data is found. 
 
@@ -120,15 +130,20 @@ PageSupport
 In parallel scenarios, the first page of data (*P1*) is fetched sequentially as a basis for splitting. Assuming *P1* shows that there are four pages (*P1, P2, P3, P4*), the remaining three pages will be split into multiple [Spliterators](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Spliterator.html) (*S1, S2, S3*). Each spliterator is an independent subtask.
 
 ```
-+-----+-----+-----+-----+ 
-|  P1 |  P2 |  P3 |  P4 | 
-+-----+-----+-----+-----+ 
-          |     |     |   
-          |     |     |   
-          v     v     v   
-       +-----+-----+-----+
-       |  S1 |  S2 |  S3 |
-       +-----+-----+-----+
+              +-----+
+              |  P1 | (Base: fetched first)
+              +-----+
+                |
+  +-------------+-------------+
+  |             |             |
++-----+     +-----+       +-----+
+|  P2 |     |  P3 |       |  P4 |
++-----+     +-----+       +-----+
+  |           |             |
+  v           v             v
++-----+     +-----+       +-----+
+|  S1 |     |  S2 |       |  S3 |
++-----+     +-----+       +-----+
 ```
 
 In summary, the key points of parallel processing are:
@@ -137,7 +152,7 @@ In summary, the key points of parallel processing are:
 2. The minimum unit of processing for a subtask is each page.
 3. Each subtask may not necessarily run on an independent thread, but will be handled by Java's [parallelism mechanisms](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html).
 
-> APIs starting with `fixed*` do not support parallel processing.
+> APIs starting with [`fixed*`](#fixed-pageable) do not support parallel processing.
 
 #### Performance Impact
 

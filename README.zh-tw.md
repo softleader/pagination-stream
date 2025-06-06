@@ -44,7 +44,7 @@ PageSupport
   })
 ```
 
-如果你不是很在乎有多少頁, 只想 Streaming 的處理每頁中的資料, 你可以使用 `PageSupport#stream` 建立 `Stream<T>`, 範例如下:
+如果你不是很在意有多少頁, 只想 Streaming 的處理每頁中的資料, 你可以使用 `PageSupport#stream` 建立 `Stream<T>`, 範例如下:
 
 ```java    
 PageSupport
@@ -53,6 +53,16 @@ PageSupport
     // do something to every single data
   })
 ```
+
+執行時, 會根據每次取得的分頁資訊, 透過 `Pageable#next()` 順序逐頁擷取資料, 直到最後一頁 (*Pn*):
+
+```
++-----+-----+-----+-----+-----+
+|  P1 |  P2 |  P3 |  .. |  Pn |
++-----+-----+-----+-----+-----+
+```
+
+### Fixed Pageable
 
 `fixedStream` 或 `fixedPagedStream` 提供給使用固定的 `Pageable` 作為分頁條件的情境, 每次都從資料源撈取「當下還符合條件的資料」來處理, 重複這個過程直到查不到任何資料為止
 
@@ -117,15 +127,20 @@ PageSupport
 在 Parallel 情境中,  會先同步 (Sequential) 的取回第一次資料含分頁資訊 (*P1*) 作為拆分基礎, 假設 *P1* 取回的資料顯示共有 4 個分頁 (*P1, P2, P3, P4*), 之後的 3 個分頁會被拆分成多個 [Spliterator](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Spliterator.html) (*S1, S2, S3*)。每個拆分的 Spliterator 都會是一個子任務可以被獨立的執行。
 
 ```
-+-----+-----+-----+-----+ 
-|  P1 |  P2 |  P3 |  P4 | 
-+-----+-----+-----+-----+ 
-          |     |     |   
-          |     |     |   
-          v     v     v   
-       +-----+-----+-----+
-       |  S1 |  S2 |  S3 |
-       +-----+-----+-----+
+              +-----+
+              |  P1 | (Base: fetched first)
+              +-----+
+                |
+  +-------------+-------------+
+  |             |             |
++-----+     +-----+       +-----+
+|  P2 |     |  P3 |       |  P4 |
++-----+     +-----+       +-----+
+  |           |             |
+  v           v             v
++-----+     +-----+       +-----+
+|  S1 |     |  S2 |       |  S3 |
++-----+     +-----+       +-----+
 ```
 
 總結以上, Parallel 的重點摘錄如下:
@@ -134,7 +149,7 @@ PageSupport
 2. 子任務處理的最小單位是每一個分頁 (Page)
 3. 每個子任務不一定是獨立的 Thread 去執行, 這部分回歸 Java 的 [Parallelism 機制](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)去處理
 
-> `fixed*` 開頭的 API 不支援 Parallel 處理
+> [`fixed*`](#fixed-pageable) 開頭的 API 不支援 Parallel 處理
 
 #### Performance Impact
 
