@@ -31,7 +31,7 @@
     <developerConnection>scm:git:git@github.com:softleader/pagination-stream.git</developerConnection>
     <url>https://github.com/softleader/pagination-stream</url>
   </scm>
-  
+
   <properties>
     <java.version>11</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
