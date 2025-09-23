@@ -60,7 +60,8 @@
     <license-maven-plugin.version>4.6</license-maven-plugin.version>
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
-
+    <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
+    
     <spring-boot.version>2.7.18</spring-boot.version>
     <skip.formatting>false</skip.formatting>
     <jool.version>0.9.15</jool.version>
@@ -230,6 +231,17 @@
       <id>release</id>
       <build>
         <plugins>
+          <plugin>
+            <!-- https://central.sonatype.org/publish/publish-portal-maven/ -->
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>${central-publishing-maven-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+            </configuration>
+          </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>build-helper-maven-plugin</artifactId>
