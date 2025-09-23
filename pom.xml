@@ -31,18 +31,7 @@
     <developerConnection>scm:git:git@github.com:softleader/pagination-stream.git</developerConnection>
     <url>https://github.com/softleader/pagination-stream</url>
   </scm>
-
-  <distributionManagement>
-    <repository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
+  
   <properties>
     <java.version>11</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -61,7 +50,7 @@
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
     <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
     <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
-    
+
     <spring-boot.version>2.7.18</spring-boot.version>
     <skip.formatting>false</skip.formatting>
     <jool.version>0.9.15</jool.version>
