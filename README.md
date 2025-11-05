@@ -246,6 +246,38 @@ class DifficultCalculationService {
 }
 ```
 
+## Test
+
+When testing logic that uses `pagination-stream`, we can mock the `fetcher` using tools like Mockito to focus on our business logic. For example:
+
+```java
+@ExtendWith(MockitoExtension.class)
+class DifficultCalculationServiceTest {
+
+  @Mock
+  PersonRepository repository;
+
+  @InjectMocks
+  DifficultCalculationService service;
+
+  @Test
+  void test() {
+    var spec = ...;
+    var pageable = Pageable.ofSize(10);
+
+    var p1 = new PageImpl<>(List.of(new Person(1), new Person(2)), pageable, 4);
+    var p2 = new PageImpl<>(List.of(new Person(3), new Person(4)), pageable.next(), 4);
+
+    when(repository.findAll(spec, pageable)).thenReturn(p1);
+    when(repository.findAll(spec, pageable.next())).thenReturn(p2);
+
+    var actual = service.calculate(spec, pageable);
+
+    assertThat(actual).isEqualTo(1+2+3+4);
+  }
+}
+```
+
 ## Caution
 
 **When dealing with situations where the number of records cannot be controlled, it is recommended to use streaming logic as much as possible to avoid impacting your app, such as memory OOM!**

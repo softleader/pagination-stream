@@ -244,6 +244,38 @@ class DifficultCalculationService {
 }
 ```
 
+## Test
+
+當我們在測試使用到 `pagination-stream` 的邏輯時, 我們可以利用 mockito 等工具將 `fetcher` mock 起來即可, 藉此來專注在我們的商業邏輯上, 例如:
+
+```java
+@ExtendWith(MockitoExtension.class)
+class DifficultCalculationServiceTest {
+
+  @Mock
+  PersonRepository repository;
+
+  @InjectMocks
+  DifficultCalculationService service;
+
+  @Test
+  void test() {
+    var spec = ...;
+    var pageable = Pageable.ofSize(10);
+
+    var p1 = new PageImpl<>(List.of(new Person(1), new Person(2)), pageable, 4);
+    var p2 = new PageImpl<>(List.of(new Person(3), new Person(4)), pageable.next(), 4);
+
+    when(repository.findAll(spec, pageable)).thenReturn(p1);
+    when(repository.findAll(spec, pageable.next())).thenReturn(p2);
+
+    var actual = service.calculate(spec, pageable);
+
+    assertThat(actual).isEqualTo(1+2+3+4);
+  }
+}
+```
+
 ## Caution
 
 **當你在處理不能掌控資料筆數的情境時, 建議都要儘可能的使用 Streaming 的方式去規劃程式邏輯, 以避免因資料筆數造成自身 App 的衝擊, 如: 記憶體 OOM!**
