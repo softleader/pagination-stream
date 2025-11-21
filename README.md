@@ -105,9 +105,11 @@ PageSupport
 You can implement your own `AttemptPolicy` to define a custom logic, for example:
 
 ```java
+import static tw.com.softleader.data.stream.AttemptPolicyFactory.*;
+
 class MyAttemptPolicy implements AttemptPolicy {
 
-  @Override
+###   @Override
   public boolean canProceed(long currentAttempt) {
     return ...; // Custom logic
   }
@@ -119,7 +121,7 @@ PageSupport.fixedStream(
     2L,
     "3",
     Pageable.ofSize(10),
-    AttemptPolicyFactory.of(new MyAttemptPolicy()))
+    ofPolicy(new MyAttemptPolicy()))
   ...
 ```
 

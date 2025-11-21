@@ -38,7 +38,7 @@ public interface AttemptPolicyFactory {
 
   /** 不限制嘗試次數 */
   static AttemptPolicyFactory unlimited() {
-    return of(__ -> true);
+    return ofPolicy(__ -> true);
   }
 
   /**
@@ -48,7 +48,7 @@ public interface AttemptPolicyFactory {
    */
   static AttemptPolicyFactory maxAttempts(long maxAttempts) {
     isTrue(maxAttempts > 0, "maxAttempts must > 0");
-    return of(currentAttempt -> currentAttempt < maxAttempts);
+    return ofPolicy(currentAttempt -> currentAttempt < maxAttempts);
   }
 
   /** 以 {@link #DEFAULT_TOTAL_PAGE_BUFFER_MULTIPLIER} 計算 {@link #totalPage(int)} */
@@ -76,7 +76,7 @@ public interface AttemptPolicyFactory {
    * @param policy a {@link AttemptPolicy} to decide whether an attempt can proceed based on a given
    *     attempt number
    */
-  static AttemptPolicyFactory of(@NonNull AttemptPolicy policy) {
+  static AttemptPolicyFactory ofPolicy(@NonNull AttemptPolicy policy) {
     return firstPage -> policy;
   }
 }

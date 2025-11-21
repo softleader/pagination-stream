@@ -100,6 +100,8 @@ PageSupport
 你也可以使用自訂義的 `AttemptPolicy` 作為嘗試策略, 例如:
 
 ```java
+import static tw.com.softleader.data.stream.AttemptPolicyFactory.*;
+
 class MyAttemptPolicy implements AttemptPolicy {
 
   @Override
@@ -114,7 +116,7 @@ PageSupport.fixedStream(
     2L,
     "3",
     Pageable.ofSize(10),
-    AttemptPolicyFactory.of(new MyAttemptPolicy()))
+    ofPolicy(new MyAttemptPolicy()))
   ...
 ```
 
