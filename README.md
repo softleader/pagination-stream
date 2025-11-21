@@ -109,7 +109,7 @@ import static tw.com.softleader.data.stream.AttemptPolicyFactory.*;
 
 class MyAttemptPolicy implements AttemptPolicy {
 
-###   @Override
+  @Override
   public boolean canProceed(long currentAttempt) {
     return ...; // Custom logic
   }
