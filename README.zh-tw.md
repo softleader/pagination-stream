@@ -114,7 +114,7 @@ PageSupport.fixedStream(
     2L,
     "3",
     Pageable.ofSize(10),
-    AttemptPolicyFactory.of(new MyAttemptPolicy()));
+    AttemptPolicyFactory.of(new MyAttemptPolicy()))
   ...
 ```
 
