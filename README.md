@@ -102,21 +102,24 @@ PageSupport
   ...
 ```
 
-You can implement your own `AttemptPolicyFactory` to define a custom logic, for example:
+You can implement your own `AttemptPolicy` to define a custom logic, for example:
 
 ```java
-class MyAttemptPolicyFactory implements AttemptPolicyFactory {
+class MyAttemptPolicy implements AttemptPolicy {
+
   @Override
-  public AttemptPolicy create(@NonNull Page<?> firstPage) {
-    return currentAttempt -> {
-      // Custom logic
-      return ...;
-    };
+  public boolean canProceed(long currentAttempt) {
+    return ...; // Custom logic
   }
 }
 
-PageSupport
-  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), new MyAttemptPolicyFactory())
+PageSupport.fixedStream(
+    fetch::data,
+    1,
+    2L,
+    "3",
+    Pageable.ofSize(10),
+    AttemptPolicyFactory.of(new MyAttemptPolicy()));
   ...
 ```
 

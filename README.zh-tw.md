@@ -97,24 +97,24 @@ PageSupport
   ...
 ```
 
-你也可以透過實作 `AttemptPolicyFactory` 來指定自訂的嘗試策略, 例如:
+你也可以使用自訂義的 `AttemptPolicy` 作為嘗試策略, 例如:
 
 ```java
-class MyAttemptPolicyFactory implements AttemptPolicyFactory {
+class MyAttemptPolicy implements AttemptPolicy {
 
   @Override
-  public AttemptPolicy create(@NonNull Page<?> firstPage) {
-    return new AttemptPolicy() {
-      @Override
-      public boolean canProceed(long currentAttempt) {
-        return ...; // 實作自訂邏輯
-      }
-    };
+  public boolean canProceed(long currentAttempt) {
+    return ...; // 實作自訂邏輯
   }
 }
 
-PageSupport
-  .fixedStream(fetch::data, 1, 2L, "3", Pageable.ofSize(10), new MyAttemptPolicyFactory())
+PageSupport.fixedStream(
+    fetch::data,
+    1,
+    2L,
+    "3",
+    Pageable.ofSize(10),
+    AttemptPolicyFactory.of(new MyAttemptPolicy()));
   ...
 ```
 

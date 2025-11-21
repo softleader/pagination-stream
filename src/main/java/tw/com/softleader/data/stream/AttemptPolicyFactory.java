@@ -38,7 +38,7 @@ public interface AttemptPolicyFactory {
 
   /** 不限制嘗試次數 */
   static AttemptPolicyFactory unlimited() {
-    return firstPage -> currentAttempt -> true;
+    return of(__ -> true);
   }
 
   /**
@@ -48,7 +48,7 @@ public interface AttemptPolicyFactory {
    */
   static AttemptPolicyFactory maxAttempts(long maxAttempts) {
     isTrue(maxAttempts > 0, "maxAttempts must > 0");
-    return firstPage -> currentAttempt -> currentAttempt < maxAttempts;
+    return of(currentAttempt -> currentAttempt < maxAttempts);
   }
 
   /** 以 {@link #DEFAULT_TOTAL_PAGE_BUFFER_MULTIPLIER} 計算 {@link #totalPage(int)} */
@@ -68,5 +68,15 @@ public interface AttemptPolicyFactory {
       long maxAttempts = (long) firstPage.getTotalPages() * bufferMultiplier;
       return maxAttempts(maxAttempts).create(firstPage);
     };
+  }
+
+  /**
+   * 直接以傳入的 {@link AttemptPolicy} 來判斷是否還能繼續處理
+   *
+   * @param policy a {@link AttemptPolicy} to decide whether an attempt can proceed based on a given
+   *     attempt number
+   */
+  static AttemptPolicyFactory of(@NonNull AttemptPolicy policy) {
+    return firstPage -> policy;
   }
 }
