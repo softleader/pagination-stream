@@ -4,7 +4,7 @@
 
   <groupId>tw.com.softleader.data</groupId>
   <artifactId>pagination-stream</artifactId>
-  <version>1.2.3-SNAPSHOT</version>
+  <version>1.3.0</version>
 
   <name>pagination-stream</name>
   <description>Pagination stream API for Spring Data</description>
@@ -196,10 +196,10 @@
         <configuration>
           <applySkip>${skip.formatting}</applySkip>
           <java>
-            <googleJavaFormat></googleJavaFormat>
+            <googleJavaFormat/>
           </java>
           <pom>
-            <sortPom></sortPom>
+            <sortPom/>
           </pom>
         </configuration>
         <executions>
