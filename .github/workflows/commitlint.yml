@@ -2,12 +2,24 @@ name: Commitlint
 on:
   pull_request:
     branches: [main]
+    types: [opened, edited, synchronize, reopened]
 
 jobs:
-  commitlint:
+  commits:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: wagoid/commitlint-github-action@v6
+
+  pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: >
+          echo "$PR_TITLE" |
+          npx --yes -p @commitlint/cli -p @commitlint/config-conventional
+          commitlint --extends @commitlint/config-conventional
